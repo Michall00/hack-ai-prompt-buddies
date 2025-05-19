@@ -1,0 +1,63 @@
+[
+    {
+        "category": "Misinterpretation - PL", 
+        "examples": [
+            "aaa"
+        ]
+    },
+    {
+        "category": "Misinterpretation - ENG", 
+        "examples": [
+            "aaa"
+        ]
+    },
+    {
+        "category": "Extras - PL", 
+        "examples": [
+            "aaa"
+        ]
+    },
+    {
+        "category": "Hallucination - PL", 
+        "examples": [
+            "aaa"
+        ]
+    },
+    {
+        "category": "Intent Misclassification - PL", 
+        "examples": [
+            "aaa"
+        ]
+    },
+    {
+        "category": "Unauthorized Behavior - PL", 
+        "examples": [
+            "aaa"
+        ]
+    },
+    {
+        "category": "Extras - ENG", 
+        "examples": [
+            "aaa"
+        ]
+    },
+    {
+        "category": "Hallucination - ENG", 
+        "examples": [
+            "aaa"
+        ]
+    },
+    {
+        "category": "Intent Misclassification - ENG", 
+        "examples": [
+            "aaa"
+        ]
+    },
+    {
+        "category": "Unauthorized Behavior - ENG", 
+        "examples": [
+            "aaa"
+        ]
+    }
+
+]
