@@ -5,7 +5,7 @@ from playwright.sync_api import Playwright, sync_playwright, expect
 from time import sleep
 from src.prompt_genaration.prompt_generator import PromptGenerator
 from src.config import TOGETHER_API_MODEL
-from src.utils import log_response
+from src.utils import log_response, extract_conversation_id
 from src.prompt_genaration.system_prompt_generator import SystemPromptGenerator
 from datetime import datetime
 
@@ -50,7 +50,6 @@ def run(playwright: Playwright,
         system_prompt: str,
         login: str,
         password: str,
-        log_path: str = "prompt_logs.txt",
     ) -> None:
     browser = playwright.chromium.launch(headless=False)
     context = browser.new_context()
@@ -78,6 +77,8 @@ def run(playwright: Playwright,
     send_message(page, prompt)
 
     last_message = page.locator("#root div >> p.textContent").last.inner_text()
+    conversation_id = None
+
     text = last_message
     while True:
         try:
@@ -85,7 +86,11 @@ def run(playwright: Playwright,
                 sleep(1)
                 text = page.locator("#root div >> p.textContent").last.inner_text()
             last_message = text
-            log_response(text)
+            if conversation_id is None:
+                os.makedirs("logs", exist_ok=True)
+                conversation_id = extract_conversation_id(text)
+                log_path = f"logs/{conversation_id}.json"
+            log_response(text, sender='bot', log_path=log_path)
             response = text.split("==========")[0].strip()
             mbank_message = {
                 'role': 'user',
@@ -94,7 +99,7 @@ def run(playwright: Playwright,
             messages.append(mbank_message)
 
             prompt = prompt_generator.generate_next_prompt(messages=messages)
-            log_response(prompt)
+            log_response(prompt, sender='user', log_path=log_path)
             send_message(page, prompt)
             intput_message = {
                 'role': 'assistant',
@@ -120,7 +125,6 @@ if __name__ == "__main__":
             category="Misinterpretation - PL"
         )
         prompt_generator = PromptGenerator(TOGETHER_API_MODEL)
-        log_path = "prompt_logs" + str(datetime.now()) + ".txt"
         run(
             playwright, 
             prompt_generator=prompt_generator,
