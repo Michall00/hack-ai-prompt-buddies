@@ -124,9 +124,3 @@ class SystemPromptGenerator:
         system_prompt += "\n\n" + (PROMPT_WARNING_PL if pl else PROMPT_WARNING_ENG)
 
         return system_prompt
-
-
-if __name__ == "__main__":
-    generator = SystemPromptGenerator()
-    print(generator.get_system_prompt())
-    print(generator.get_system_prompt(category="Misinterpretation - PL"))
