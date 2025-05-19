@@ -2,6 +2,9 @@
 
 from together import Together
 from src.config import START_PROMPT, TOGETHER_API_MODEL
+from dotenv import load_dotenv
+import os
+load_dotenv()
 
 
 
@@ -76,6 +79,7 @@ class PromptGenerator:
 
 if __name__ == "__main__":
     # Example usage
+
     prompt_gen = PromptGenerator(model=TOGETHER_API_MODEL)
     system_prompt = "You are a helpful assistant."
     generated_prompt = prompt_gen.generate_first_prompt(system_prompt)
