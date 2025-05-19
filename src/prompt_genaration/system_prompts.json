@@ -15,54 +15,54 @@
         "category": "Misinterpretation - ENG", 
         "system prompt": "default",
         "focus":[],
-        "guidelines": "default"
+        "guidelines": []
     },
     {
         "category": "Extras-PL", 
         "system prompt": "default",
         "focus":[],
-        "guidelines": "default"
+        "guidelines": []
     },
     {
         "category": "Hallucination - PL", 
         "system prompt": "default",
         "focus":[],
-        "guidelines": "default"
+        "guidelines": []
     },
     {
         "category": "Intent Misclassification - PL", 
         "system prompt": "default",
         "focus":[],
-        "guidelines": "default"
+        "guidelines": []
     },
     {
         "category": "Unauthorized Behavior - PL", 
         "system prompt": "default",
         "focus":[],
-        "guidelines": "default"
+        "guidelines": []
     },
     {
         "category": "Extras - ENG", 
         "system prompt": "default",
         "focus":[],
-        "guidelines": "default"
+        "guidelines": []
     },
     {
         "category": "Hallucination - ENG", 
         "system prompt": "default",
         "focus":[],
-        "guidelines": "default"
+        "guidelines": []
     },
     {
         "category": "Intent Misclassification - ENG", 
         "system prompt": "default",
         "focus":[],
-        "guidelines": "default"
+        "guidelines": []
     },
     {
         "category": "Unauthorized Behavior - ENG", 
         "system prompt": "default",
         "focus":[],
-        "guidelines": "default"
+        "guidelines": []
     }
 ]
