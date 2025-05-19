@@ -1,3 +1,7 @@
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
+
 [project]
 name = "hack-ai-prompt-buddies"
 version = "0.1.0"
@@ -8,4 +12,6 @@ dependencies = [
     "cookiecutter-data-science>=2.2.0",
     "dotenv>=0.9.9",
     "requests>=2.32.3",
+    "setuptools>=80.7.1",
+    "together>=1.5.8",
 ]
