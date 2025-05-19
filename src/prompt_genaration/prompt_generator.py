@@ -1,3 +1,5 @@
+from typing import Optional
+
 from together import Together
 
 from src.config import START_PROMPT, TOGETHER_API_MODEL
@@ -16,7 +18,10 @@ class PromptGenerator:
         self.model = model
 
     def generate_first_prompt(
-        self, system_prompt: str, mbank_start_text: str = START_PROMPT
+        self,
+        system_prompt: str,
+        mbank_start_text: str = START_PROMPT,
+        temperature: Optional[float] = None,
     ) -> str:
         """
         Generate the first prompt using the system prompt.
@@ -24,6 +29,7 @@ class PromptGenerator:
         Args:
             system_prompt (str): The system prompt to be used.
             mbank_start_text (str): The starting text for mBank.
+            temperature (float, optional): The temperature for the generation. Default is None.
 
         Returns:
             str: The generated prompt.
@@ -41,8 +47,7 @@ class PromptGenerator:
         ]
         try:
             response = self.client.chat.completions.create(
-                model=self.model,
-                messages=messages,
+                model=self.model, messages=messages, temperature=temperature
             )
             return response.choices[0].message.content.strip()
 
@@ -51,12 +56,22 @@ class PromptGenerator:
             return "Error: Unable to generate summary."
 
     def generate_next_prompt(
-        self, messages: list[dict], extra_system_prompt: str = ""
+        self,
+        messages: list[dict],
+        extra_system_prompt: str = "",
+        temperature: Optional[float] = None,
     ) -> str:
         """
         Generate the next prompt using the provided messages and an optional extra system prompt.
-        """
 
+        Args:
+            messages (list[dict]): The list of messages to be used.
+            extra_system_prompt (str): An optional extra system prompt to be included.
+            temperature (float, optional): The temperature for the generation. Default is None.
+
+        Returns:
+            str: The generated prompt.
+        """
         if extra_system_prompt:
             messages.append(
                 {
@@ -66,8 +81,7 @@ class PromptGenerator:
             )
         try:
             response = self.client.chat.completions.create(
-                model=self.model,
-                messages=messages,
+                model=self.model, messages=messages, temperature=temperature
             )
             return response.choices[0].message.content.strip()
 
@@ -79,7 +93,7 @@ class PromptGenerator:
 if __name__ == "__main__":
     generator = SystemPromptGenerator()
     system_prompt = generator.get_system_prompt(category="Misinterpretation - PL")
-    system_prompt += 'Niech twoje odpowiedzi nie przkraczają 400 znaków.'
+    system_prompt += "Niech twoje odpowiedzi nie przkraczają 400 znaków."
     prompt_gen = PromptGenerator(model=TOGETHER_API_MODEL)
     generated_prompt = prompt_gen.generate_first_prompt(system_prompt)
     print(generated_prompt)
