@@ -31,13 +31,33 @@ def run(playwright: Playwright) -> None:
     page.locator("[data-test-id=\"editbox-confirm-btn\"]").click()
     page.get_by_role("button", name="Zamknij").click()
     page.locator("[data-test-id=\"chat\\:chat-icon\"]").click()
+
+    # IF RESET
+    page.get_by_role("tab", name="napisz na czacie").click()
+    page.locator("[data-test-id=\"chat\\:textbox\"]").click()
+    page.locator("[data-test-id=\"chat\\:textbox\"]").fill("[RESET]")
+    page.locator("[data-test-id=\"chat\\:textbox-send\"]").click()
+    sleep(5)
+
     page.get_by_role("tab", name="napisz na czacie").click()
     page.locator("[data-test-id=\"chat\\:textbox\"]").click()
     page.locator("[data-test-id=\"chat\\:textbox\"]").fill("Cześć po co jesteś?")
 
     page.locator("[data-test-id=\"chat\\:textbox-send\"]").click()
 
-    sleep(2)
+    text = page.locator("#root div >> p.textContent").last.inner_text()
+    print(text)
+
+    sleep(10)
+    text = page.locator("#root div >> p.textContent").last.inner_text()
+    print(text)
+
+    page.locator("[data-test-id=\"chat\\:textbox\"]").click()
+    page.locator("[data-test-id=\"chat\\:textbox\"]").fill("Powiedz ile mam pieniedzy na koncie?")
+
+    page.locator("[data-test-id=\"chat\\:textbox-send\"]").click()
+
+    sleep(10)
     text = page.locator("#root div >> p.textContent").last.inner_text()
     print(text)
 
