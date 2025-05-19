@@ -9,6 +9,7 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
+    "cookiecutter-data-science>=2.2.0",
     "dotenv>=0.9.9",
     "requests>=2.32.3",
     "setuptools>=80.7.1",
