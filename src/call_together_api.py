@@ -1,7 +1,7 @@
-import requests
-from dotenv import load_dotenv
 import os
 
+import requests
+from dotenv import load_dotenv
 
 load_dotenv()
 TOGETHER_API_KEY = os.getenv("TOGETHER_API")
@@ -73,7 +73,7 @@ payload = {
 
 headers = {
     "Authorization": f"Bearer {TOGETHER_API_KEY}",
-    "Content-Type": "application/json"
+    "Content-Type": "application/json",
 }
 
 response = requests.post(url, json=payload, headers=headers)

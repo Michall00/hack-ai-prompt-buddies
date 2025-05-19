@@ -1,11 +1,6 @@
-
-
 from together import Together
-from src.config import START_PROMPT, TOGETHER_API_MODEL
-from dotenv import load_dotenv
-import os
-load_dotenv()
 
+from src.config import START_PROMPT, TOGETHER_API_MODEL
 
 
 class PromptGenerator:
@@ -18,9 +13,10 @@ class PromptGenerator:
         """
         self.client = Together()
         self.model = model
-    
 
-    def generate_first_prompt(self, system_prompt: str, mbank_start_text: str = START_PROMPT) -> str:
+    def generate_first_prompt(
+        self, system_prompt: str, mbank_start_text: str = START_PROMPT
+    ) -> str:
         """
         Generate the first prompt using the system prompt.
 
@@ -31,7 +27,7 @@ class PromptGenerator:
         Returns:
             str: The generated prompt.
         """
-        
+
         messages = [
             {
                 "role": "system",
@@ -53,16 +49,19 @@ class PromptGenerator:
             print(f"Error during API call: {e}")
             return "Error: Unable to generate summary."
 
-
     def generate_next_prompt(
         self, messages: list[dict], extra_system_prompt: str = ""
     ) -> str:
-        
+        """
+        Generate the next prompt using the provided messages and an optional extra system prompt.
+        """
+
         if extra_system_prompt:
-            messages.append({
-                "role": "system",
-                "content": extra_system_prompt,
-            }
+            messages.append(
+                {
+                    "role": "system",
+                    "content": extra_system_prompt,
+                }
             )
 
         try:
@@ -78,8 +77,6 @@ class PromptGenerator:
 
 
 if __name__ == "__main__":
-    # Example usage
-
     prompt_gen = PromptGenerator(model=TOGETHER_API_MODEL)
     system_prompt = "You are a helpful assistant."
     generated_prompt = prompt_gen.generate_first_prompt(system_prompt)
