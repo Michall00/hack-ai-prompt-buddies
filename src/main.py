@@ -38,6 +38,9 @@ def run(playwright: Playwright) -> None:
     page.locator("[data-test-id=\"chat\\:textbox-send\"]").click()
 
     sleep(2)
+    text = page.locator("#root div >> p.textContent").last.inner_text()
+    print(text)
+
     context.close()
     browser.close()
 
