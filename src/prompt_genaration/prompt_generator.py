@@ -1,6 +1,7 @@
 from together import Together
 
 from src.config import START_PROMPT, TOGETHER_API_MODEL
+from src.prompt_genaration.system_prompt_generator import SystemPromptGenerator
 
 
 class PromptGenerator:
@@ -63,7 +64,6 @@ class PromptGenerator:
                     "content": extra_system_prompt,
                 }
             )
-
         try:
             response = self.client.chat.completions.create(
                 model=self.model,
@@ -77,7 +77,9 @@ class PromptGenerator:
 
 
 if __name__ == "__main__":
+    generator = SystemPromptGenerator()
+    system_prompt = generator.get_system_prompt(category="Misinterpretation - PL")
+
     prompt_gen = PromptGenerator(model=TOGETHER_API_MODEL)
-    system_prompt = "You are a helpful assistant."
     generated_prompt = prompt_gen.generate_first_prompt(system_prompt)
     print(generated_prompt)
