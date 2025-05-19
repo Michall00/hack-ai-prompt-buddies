@@ -1,11 +1,13 @@
 import re
 from dotenv import load_dotenv
-from os import getenv
+import os
 from playwright.sync_api import Playwright, sync_playwright, expect
 from time import sleep
 from src.prompt_genaration.prompt_generator import PromptGenerator
 from src.config import TOGETHER_API_MODEL
 from src.utils import log_response
+from src.prompt_genaration.system_prompt_generator import SystemPromptGenerator
+from datetime import datetime
 
 
 def send_message(page: Playwright, message: str):
@@ -45,8 +47,10 @@ def go_to_chat(
 
 def run(playwright: Playwright, 
         prompt_generator: PromptGenerator,
+        system_prompt: str,
         login: str,
-        password: str
+        password: str,
+        log_path: str = "prompt_logs.txt",
     ) -> None:
     browser = playwright.chromium.launch(headless=False)
     context = browser.new_context()
@@ -62,7 +66,6 @@ def run(playwright: Playwright,
     send_message(page, "[RESET]")
     messages = []
 
-    system_prompt = "Jesteś klientem Mbanku zadawaj pytania aby dowiedzieć się rzeczy o ich ofercie. Generuj krótkie prompty"
     prompt = prompt_generator.generate_first_prompt(system_prompt=system_prompt)
 
     message = {
@@ -109,13 +112,19 @@ def run(playwright: Playwright,
 
 if __name__ == "__main__":
     load_dotenv()
-    login = getenv("LOGIN")
-    password = getenv("PASSWORD")
+    login = os.getenv("LOGIN")
+    password = os.getenv("PASSWORD")
     with sync_playwright() as playwright:
+        system_prompt_generator = SystemPromptGenerator()
+        system_prompt = system_prompt_generator.get_system_prompt(
+            category="Misinterpretation - PL"
+        )
         prompt_generator = PromptGenerator(TOGETHER_API_MODEL)
+        log_path = "prompt_logs" + str(datetime.now()) + ".txt"
         run(
             playwright, 
             prompt_generator=prompt_generator,
+            system_prompt=system_prompt,
             login=login,
             password=password
         )

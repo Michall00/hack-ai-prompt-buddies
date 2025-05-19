@@ -79,7 +79,7 @@ class PromptGenerator:
 if __name__ == "__main__":
     generator = SystemPromptGenerator()
     system_prompt = generator.get_system_prompt(category="Misinterpretation - PL")
-
+    system_prompt += 'Niech twoje odpowiedzi nie przkraczają 400 znaków.'
     prompt_gen = PromptGenerator(model=TOGETHER_API_MODEL)
     generated_prompt = prompt_gen.generate_first_prompt(system_prompt)
     print(generated_prompt)
