@@ -78,6 +78,7 @@ def run(playwright: Playwright,
 
     last_message = page.locator("#root div >> p.textContent").last.inner_text()
     conversation_id = None
+    time = datetime.now()
 
     text = last_message
     while True:
@@ -89,7 +90,7 @@ def run(playwright: Playwright,
             if conversation_id is None:
                 os.makedirs("logs", exist_ok=True)
                 conversation_id = extract_conversation_id(text)
-                log_path = f"logs/{conversation_id}.json"
+                log_path = f"logs/{conversation_id}__time__{time}.json"
             log_response(text, sender='bot', log_path=log_path)
             response = text.split("==========")[0].strip()
             mbank_message = {
@@ -99,6 +100,8 @@ def run(playwright: Playwright,
             messages.append(mbank_message)
 
             prompt = prompt_generator.generate_next_prompt(messages=messages)
+            if (prompt == "Error: Unable to generate summary."):
+                break
             log_response(prompt, sender='user', log_path=log_path)
             send_message(page, prompt)
             intput_message = {
@@ -125,6 +128,7 @@ if __name__ == "__main__":
             category="Misinterpretation - PL"
         )
         prompt_generator = PromptGenerator(TOGETHER_API_MODEL)
+        system_prompt += "Wiadomości mają być do 400 znaków."
         run(
             playwright, 
             prompt_generator=prompt_generator,
