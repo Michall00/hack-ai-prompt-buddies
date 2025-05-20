@@ -8,18 +8,23 @@ from src.config import TOGETHER_API_MODEL
 from src.utils import log_response, extract_conversation_id
 from src.prompt_genaration.system_prompt_generator import SystemPromptGenerator
 from datetime import datetime
+from enum import Enum, auto
+
+
+class ResponseType(Enum):
+    MESSAGE = auto()
+    BUTTONS = auto()
+    RESET = auto()
+    UNKNOWN = auto()
 
 
 def send_message(page: Playwright, message: str):
-    page.locator("[data-test-id=\"chat\\:textbox\"]").click()
-    page.locator("[data-test-id=\"chat\\:textbox\"]").fill(message)
-    page.locator("[data-test-id=\"chat\\:textbox-send\"]").click()
+    page.locator('[data-test-id="chat\\:textbox"]').click()
+    page.locator('[data-test-id="chat\\:textbox"]').fill(message)
+    page.locator('[data-test-id="chat\\:textbox-send"]').click()
 
 
-def login_to_mbank(
-        page: Playwright, 
-        login: str, password: str
-    ) -> Playwright:
+def login_to_mbank(page: Playwright, login: str, password: str) -> Playwright:
     page.get_by_role("textbox", name="Identyfikator").click()
     page.get_by_role("textbox", name="Identyfikator").fill(login)
 
@@ -28,29 +33,45 @@ def login_to_mbank(
 
     page.get_by_role("button", name="Zaloguj się").wait_for(state="visible")
     page.get_by_role("button", name="Zaloguj się").click(force=True)
-    
+
+    page.get_by_role("textbox", name="Kod SMS").wait_for(state="visible", timeout=60000)
     page.get_by_role("textbox", name="kod SMS").click()
     page.get_by_role("textbox", name="kod SMS").fill("77777777")
 
     return page
 
 
-def go_to_chat(
-        page: Playwright
-    ) -> Playwright:
-    page.locator("[data-test-id=\"editbox-confirm-btn\"]").click()
+def go_to_chat(page: Playwright) -> Playwright:
+    page.locator('[data-test-id="editbox-confirm-btn"]').click()
     page.get_by_role("button", name="Zamknij").click()
-    page.locator("[data-test-id=\"chat\\:chat-icon\"]").click()
+    page.locator('[data-test-id="chat\\:chat-icon"]').click()
     page.get_by_role("tab", name="napisz na czacie").click()
     return page
 
 
-def run(playwright: Playwright, 
-        prompt_generator: PromptGenerator,
-        system_prompt: str,
-        login: str,
-        password: str,
-    ) -> None:
+def get_current_response_type(locator) -> ResponseType:
+    # Ensure the element is visible before trying to evaluate its class
+    # This helps avoid issues with detached elements or stale references
+    last_element = locator.last
+    last_element_class = last_element.evaluate("element => element.className")
+
+    if last_element_class == "bot singlenogroup":
+        return ResponseType.MESSAGE
+    elif last_element_class == "container":  # Assuming this class indicates buttons
+        return ResponseType.BUTTONS
+    elif last_element_class == "state":
+        return ResponseType.RESET
+    else:
+        return ResponseType.UNKNOWN
+
+
+def run(
+    playwright: Playwright,
+    prompt_generator: PromptGenerator,
+    system_prompt: str,
+    login: str,
+    password: str,
+) -> None:
     browser = playwright.chromium.launch(headless=False)
     context = browser.new_context()
     page = context.new_page()
@@ -59,60 +80,76 @@ def run(playwright: Playwright,
     page = login_to_mbank(page, login=login, password=password)
     page = go_to_chat(page)
 
-    # page.locator("[data-test-id=\"editbox-confirm-btn\"]").click()
+    # page.locator('[data-test-id="editbox-confirm-btn"]').click()
     # page.get_by_role("button", name="Zamknij").click()
-    
+
     send_message(page, "[RESET]")
     messages = []
 
     prompt = prompt_generator.generate_first_prompt(system_prompt=system_prompt)
 
-    message = {
-        'role': 'system',
-        'content': system_prompt
-    }
+    message = {"role": "system", "content": system_prompt}
 
     messages.append(message)
-
     send_message(page, prompt)
 
-    last_message = page.locator("#root div >> p.textContent").last.inner_text()
+    messages_container_locator = page.locator(
+        "#root div >> mbank-chat-messages-container >> #scrollable-container div"
+    )
+
+    # current_response_type = ResponseType
+    # last_response_type = current_response_type
+
+    current_message = messages_container_locator.last.inner_text()
+    last_message = current_message
+
     conversation_id = None
 
-    text = last_message
     while True:
         try:
-            while last_message == text:
-                sleep(1)
-                text = page.locator("#root div >> p.textContent").last.inner_text()
-            last_message = text
-            if conversation_id is None:
-                os.makedirs("logs", exist_ok=True)
-                conversation_id = extract_conversation_id(text)
-                log_path = f"logs/{conversation_id}.json"
-            log_response(text, sender='bot', log_path=log_path)
-            response = text.split("==========")[0].strip()
-            mbank_message = {
-                'role': 'user',
-                'content': response
-            }
-            messages.append(mbank_message)
+            messages_container_locator = page.locator(
+                "#root div >> mbank-chat-messages-container >> #scrollable-container div"
+            )
+            current_response_type = get_current_response_type(
+                messages_container_locator
+            )  # Get the current response type
 
-            prompt = prompt_generator.generate_next_prompt(messages=messages)
-            log_response(prompt, sender='user', log_path=log_path)
-            send_message(page, prompt)
-            intput_message = {
-                'role': 'assistant',
-                'content': prompt
-            }
-            messages.append(intput_message)
+            if (
+                current_response_type == ResponseType.MESSAGE
+                or current_response_type == ResponseType.RESET
+            ):
+                while current_message == last_message:
+                    sleep(1)
+                    current_message = messages_container_locator.last.inner_text()
+
+                last_message = current_message
+                #         last_message = text
+                if conversation_id is None:
+                    os.makedirs("logs", exist_ok=True)
+                    conversation_id = extract_conversation_id(last_message)
+                    log_path = f"logs/{conversation_id}.json"
+
+                log_response(last_message, sender="bot", log_path=log_path)
+                response = last_message.split("==========")[0].strip()
+                mbank_message = {"role": "user", "content": response}
+                messages.append(mbank_message)
+
+                prompt = prompt_generator.generate_next_prompt(messages=messages)
+                log_response(prompt, sender="user", log_path=log_path)
+                send_message(page, prompt)
+                intput_message = {"role": "assistant", "content": prompt}
+                messages.append(intput_message)
+
+            else:
+                print("Waiting for response...")
+                pass
+
         except KeyboardInterrupt:
             print("Exiting...")
             break
 
     context.close()
     browser.close()
-
 
 
 if __name__ == "__main__":
@@ -126,10 +163,9 @@ if __name__ == "__main__":
         )
         prompt_generator = PromptGenerator(TOGETHER_API_MODEL)
         run(
-            playwright, 
+            playwright,
             prompt_generator=prompt_generator,
             system_prompt=system_prompt,
             login=login,
-            password=password
+            password=password,
         )
-
