@@ -10,6 +10,7 @@ from src.prompt_genaration.tools import (
     summarize_expenses_by_category,
 )
 from src.prompt_genaration.tools_definition import tools
+from together.error import InvalidRequestError
 
 
 class PromptGenerator:
@@ -23,7 +24,6 @@ class PromptGenerator:
         self.client = Together()
         self.model = model
         self.tools = tools
-        self.system_message = None
 
     def generate_first_prompt(
         self,
@@ -42,12 +42,6 @@ class PromptGenerator:
         Returns:
             str: The generated prompt.
         """
-        self.system_message = [
-            {
-                "role": "system",
-                "content": system_prompt,
-            }
-        ]
 
         messages = [
             {
@@ -73,7 +67,6 @@ class PromptGenerator:
         self,
         messages: list[dict],
         extra_system_prompt: str = "",
-        last_k_messages: int = 10,
         temperature: Optional[float] = None,
     ) -> str:
         """
@@ -94,55 +87,63 @@ class PromptGenerator:
                     "content": extra_system_prompt,
                 }
             )
-        try:
-            if len(messages) > last_k_messages:
-                messages = self.system_message + messages[-last_k_messages:]
-            response = self.client.chat.completions.create(
-                model=self.model,
-                messages=messages,
-                temperature=temperature,
-                tools=self.tools,
-                tool_choice="auto",
-            )
 
-            message = response.choices[0].message
-
-            if hasattr(message, "tool_calls") and len(message.tool_calls) > 0:
-                for call in message.tool_calls:
-                    tool_name = call.function.name
-                    args = json.loads(call.function.arguments)
-
-                    if tool_name == "get_operations_for_account":
-                        result_df = get_operations_for_account(args["account_name"])
-                        result = result_df.to_json(orient="records", indent=2)
-                    elif tool_name == "summarize_expenses_by_category":
-                        result_df = summarize_expenses_by_category(
-                            args.get("account_name")
-                        )
-                        result = result_df.to_json(orient="records", indent=2)
-                    else:
-                        result = f"Unknown tool: {tool_name}"
-
-                    messages.append(
-                        {
-                            "role": "tool",
-                            "tool_call_id": call.id,
-                            "content": result,
-                        }
-                    )
-
-                return self.generate_next_prompt(
+        while len(messages) > 1:
+            try:
+                response = self.client.chat.completions.create(
+                    model=self.model,
                     messages=messages,
-                    extra_system_prompt=extra_system_prompt,
                     temperature=temperature,
-                    last_k_messages=last_k_messages,
+                    tools=self.tools,
+                    tool_choice="auto",
                 )
 
-            return message.content.strip()
+                message = response.choices[0].message
 
-        except Exception as e:
-            print(f"Error during API call: {e}")
-            return "Error: Unable to generate the next prompt."
+                if hasattr(message, "tool_calls") and len(message.tool_calls) > 0:
+                    for call in message.tool_calls:
+                        tool_name = call.function.name
+                        args = json.loads(call.function.arguments)
+
+                        if tool_name == "get_operations_for_account":
+                            result_df = get_operations_for_account(args["account_name"])
+                            result = result_df.to_json(orient="records", indent=2)
+                        elif tool_name == "summarize_expenses_by_category":
+                            result_df = summarize_expenses_by_category(
+                                args.get("account_name")
+                            )
+                            result = result_df.to_json(orient="records", indent=2)
+                        else:
+                            result = f"Unknown tool: {tool_name}"
+
+                        messages.append(
+                            {
+                                "role": "tool",
+                                "tool_call_id": call.id,
+                                "content": result,
+                            }
+                        )
+
+                    return self.generate_next_prompt(
+                        messages=messages,
+                        extra_system_prompt=extra_system_prompt,
+                        temperature=temperature,
+                    )
+
+                return message.content.strip()
+
+            except InvalidRequestError as e:
+                print(
+                    "Context too long. Removing the second oldest message and retrying..."
+                )
+                messages.pop(1)
+            except Exception as e:
+                print(f"Error during API call: {e}")
+                return "Error: Unable to generate the next prompt."
+
+        return (
+            "Error: Unable to generate the next prompt due to excessive context length."
+        )
 
 
 if __name__ == "__main__":
