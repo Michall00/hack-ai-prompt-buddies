@@ -20,6 +20,7 @@ class PromptGenerator:
         self.model = model
         self.tools = tools
         self.system_message = None
+        self.tools = tools
 
     def generate_first_prompt(
         self,
