@@ -137,15 +137,11 @@ if __name__ == "__main__":
 
     prompt_gen = PromptGenerator(model=TOGETHER_API_MODEL)
 
-    # Test generate_first_prompt
     generated_prompt = prompt_gen.generate_first_prompt(system_prompt)
-    # print("Generated First Prompt:")
-    # print(generated_prompt)
 
-    # Test generate_next_prompt
     messages = [
         {"role": "system", "content": system_prompt},
-        {"role": "user", "content": "Nie masz kasy na GŁÓWNE KONTO."}
+        {"role": "user", "content": "Podsumuj wydatki z wszytkich kont"}
     ]
     next_prompt = prompt_gen.generate_next_prompt(messages)
     print("Generated Next Prompt:")
