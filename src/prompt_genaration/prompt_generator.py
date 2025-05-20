@@ -2,6 +2,7 @@ import json
 from typing import Optional
 
 from together import Together
+from together.error import InvalidRequestError
 
 from src.config import START_PROMPT, TOGETHER_API_MODEL
 from src.prompt_genaration.system_prompt_generator import SystemPromptGenerator
@@ -10,7 +11,6 @@ from src.prompt_genaration.tools import (
     summarize_expenses_by_category,
 )
 from src.prompt_genaration.tools_definition import tools
-from together.error import InvalidRequestError
 
 
 class PromptGenerator:
