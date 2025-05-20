@@ -4,7 +4,11 @@ from together import Together
 
 from src.config import START_PROMPT, TOGETHER_API_MODEL
 from src.prompt_genaration.system_prompt_generator import SystemPromptGenerator
-from src.prompt_genaration.tools import tools, get_operations_for_account, summarize_expenses_by_category
+from src.prompt_genaration.tools import (
+    tools,
+    get_operations_for_account,
+    summarize_expenses_by_category,
+)
 import json
 
 
@@ -39,10 +43,12 @@ class PromptGenerator:
         Returns:
             str: The generated prompt.
         """
-        self.system_message = [{
+        self.system_message = [
+            {
                 "role": "system",
                 "content": system_prompt,
-        }]
+            }
+        ]
 
         messages = [
             {
@@ -111,24 +117,34 @@ class PromptGenerator:
                         result_df = get_operations_for_account(args["account_name"])
                         result = result_df.to_json(orient="records", indent=2)
                     elif tool_name == "summarize_expenses_by_category":
-                        result_df = summarize_expenses_by_category(args.get("account_name"))
+                        result_df = summarize_expenses_by_category(
+                            args.get("account_name")
+                        )
                         result = result_df.to_json(orient="records", indent=2)
                     else:
                         result = f"Unknown tool: {tool_name}"
 
-                    messages.append({
-                        "role": "tool",
-                        "tool_call_id": call.id,
-                        "content": result,
-                    })
+                    messages.append(
+                        {
+                            "role": "tool",
+                            "tool_call_id": call.id,
+                            "content": result,
+                        }
+                    )
 
-                return self.generate_next_prompt(messages=messages, extra_system_prompt=extra_system_prompt, temperature=temperature, last_k_messages=last_k_messages)
+                return self.generate_next_prompt(
+                    messages=messages,
+                    extra_system_prompt=extra_system_prompt,
+                    temperature=temperature,
+                    last_k_messages=last_k_messages,
+                )
 
             return message.content.strip()
 
         except Exception as e:
             print(f"Error during API call: {e}")
             return "Error: Unable to generate the next prompt."
+
 
 if __name__ == "__main__":
     generator = SystemPromptGenerator()
@@ -141,7 +157,7 @@ if __name__ == "__main__":
 
     messages = [
         {"role": "system", "content": system_prompt},
-        {"role": "user", "content": "Podsumuj wydatki z wszytkich kont"}
+        {"role": "user", "content": "Podsumuj wydatki z wszytkich kont"},
     ]
     next_prompt = prompt_gen.generate_next_prompt(messages)
     print("Generated Next Prompt:")
