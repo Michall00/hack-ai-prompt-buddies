@@ -95,12 +95,11 @@ def run(
     messages_container_locator = page.locator(
         "#root div >> mbank-chat-messages-container >> #scrollable-container div"
     )
-
-    current_message = messages_container_locator.last.inner_text()
+    current_message = page.locator("#root div >> p.textContent").last.inner_text()
     last_message = current_message
 
     conversation_id = None
-    time = datetime.now()
+    timeStamp = datetime.now()
 
     while True:
         try:
@@ -110,20 +109,18 @@ def run(
             current_response_type = get_current_response_type(
                 messages_container_locator
             )
-
+            sleep(15)
+            
             if (
                 current_response_type == ResponseType.MESSAGE
                 or current_response_type == ResponseType.RESET
             ):
-                while current_message == last_message:
-                    sleep(1)
-                    current_message = page.locator("#root div >> p.textContent").last.inner_text()
 
                 last_message = current_message
                 if conversation_id is None:
                     os.makedirs("logs", exist_ok=True)
                     conversation_id = extract_conversation_id(last_message)
-                    log_path = f"logs/{conversation_id}.json"
+                    log_path = f"logs/{conversation_id}_time_{timeStamp}.json"
 
                 log_response(last_message, sender="bot", log_path=log_path)
                 response = last_message.split("==========")[0].strip()
@@ -133,7 +130,7 @@ def run(
                 prompt = prompt_generator.generate_next_prompt(messages=messages, last_k_messages=10)
                 if (prompt == "Error: Unable to generate summary."):
                     break
-                if "Jesteś zablokowany!!!" in text or "Komunikat na potrzeby hackatonu:" in text:
+                if "Jesteś zablokowany!!!" in current_message or "Komunikat na potrzeby hackatonu:" in current_message:
                     prompt = "[RESET]"
 
                 log_response(prompt, sender="user", log_path=log_path)
@@ -148,7 +145,7 @@ def run(
                 if conversation_id is None:
                     os.makedirs("logs", exist_ok=True)
                     conversation_id = extract_conversation_id(last_message)
-                    log_path = f"logs/{conversation_id}.json"
+                    log_path = f"logs/{conversation_id}_time_{timeStamp }.json"
                 
                 log_response(last_message, sender="bot", log_path=log_path)
                 response = last_message.split("==========")[0].strip()
