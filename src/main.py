@@ -102,6 +102,8 @@ def run(playwright: Playwright,
             prompt = prompt_generator.generate_next_prompt(messages=messages)
             if (prompt == "Error: Unable to generate summary."):
                 break
+            if "Jesteś zablokowany!!!" in text or "Komunikat na potrzeby hackatonu:" in text:
+                prompt = "[RESET]"
             log_response(prompt, sender='user', log_path=log_path)
             send_message(page, prompt)
             intput_message = {
