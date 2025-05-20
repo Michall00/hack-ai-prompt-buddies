@@ -67,13 +67,6 @@ def run(playwright: Playwright,
 
     prompt = prompt_generator.generate_first_prompt(system_prompt=system_prompt)
 
-    message = {
-        'role': 'system',
-        'content': system_prompt
-    }
-
-    messages.append(message)
-
     send_message(page, prompt)
 
     last_message = page.locator("#root div >> p.textContent").last.inner_text()
@@ -99,7 +92,7 @@ def run(playwright: Playwright,
             }
             messages.append(mbank_message)
 
-            prompt = prompt_generator.generate_next_prompt(messages=messages)
+            prompt = prompt_generator.generate_next_prompt(messages=messages, last_k_messages=10)
             if (prompt == "Error: Unable to generate summary."):
                 break
             if "Jesteś zablokowany!!!" in text or "Komunikat na potrzeby hackatonu:" in text:
