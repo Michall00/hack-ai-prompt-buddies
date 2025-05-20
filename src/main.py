@@ -166,8 +166,7 @@ def run(
                 prompt = prompt_generator.generate_next_prompt(messages=messages, last_k_messages=10)
                 if (prompt == "Error: Unable to generate summary."):
                     break
-                if "Jesteś zablokowany!!!" in text or "Komunikat na potrzeby hackatonu:" in text:
-                    prompt = "[RESET]"
+                
                 log_response(prompt, sender="user", log_path=log_path)
                 send_message(page, prompt)
                 intput_message = {"role": "assistant", "content": prompt}
