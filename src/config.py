@@ -12,3 +12,4 @@ PROMPT_WARNING_ENG = "Generate single prompts that a user could ask (one per mes
 PROMPT_FILES_PATH = Path("src/prompt_genaration")
 SYSTEM_PROMPT_FILE_PATH = PROMPT_FILES_PATH / "system_prompts.json"
 EXAMPLES_FILE_PATH = PROMPT_FILES_PATH / "examples.json"
+TRANSACTIONS_FILE_PATH = Path("data/transactions.csv")

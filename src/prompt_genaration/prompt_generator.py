@@ -4,6 +4,8 @@ from together import Together
 
 from src.config import START_PROMPT, TOGETHER_API_MODEL
 from src.prompt_genaration.system_prompt_generator import SystemPromptGenerator
+from src.prompt_genaration.tools import tools, get_operations_for_account, summarize_expenses_by_category
+import json
 
 
 class PromptGenerator:
@@ -16,6 +18,7 @@ class PromptGenerator:
         """
         self.client = Together()
         self.model = model
+        self.tools = tools
         self.system_message = None
 
     def generate_first_prompt(
@@ -68,15 +71,15 @@ class PromptGenerator:
         temperature: Optional[float] = None,
     ) -> str:
         """
-        Generate the next prompt using the provided messages and an optional extra system prompt.
+        Generate the next prompt based on the provided messages and tools.
 
         Args:
-            messages (list[dict]): The list of messages to be used.
-            extra_system_prompt (str): An optional extra system prompt to be included.
-            temperature (float, optional): The temperature for the generation. Default is None.
+            messages (list[dict]): A list of message dictionaries for the conversation.
+            extra_system_prompt (str, optional): Additional system prompt to include. Defaults to "".
+            temperature (float, optional): The temperature for the generation. Defaults to None.
 
         Returns:
-            str: The generated prompt.
+            str: The generated response or tool result.
         """
         if extra_system_prompt:
             messages.append(
@@ -88,19 +91,61 @@ class PromptGenerator:
         try:
             messages = self.system_message + messages[-last_k_messages:]
             response = self.client.chat.completions.create(
-                model=self.model, messages=messages, temperature=temperature
+                model=self.model,
+                messages=messages,
+                temperature=temperature,
+                tools=self.tools,
+                tool_choice="auto",
             )
-            return response.choices[0].message.content.strip()
+
+            message = response.choices[0].message
+            messages.append(message)
+
+            if hasattr(message, "tool_calls"):
+                for call in message.tool_calls:
+                    tool_name = call.function.name
+                    args = json.loads(call.function.arguments)
+
+                    if tool_name == "get_operations_for_account":
+                        result_df = get_operations_for_account(args["account_name"])
+                        result = result_df.to_json(orient="records", indent=2)
+                    elif tool_name == "summarize_expenses_by_category":
+                        result_df = summarize_expenses_by_category(args.get("account_name"))
+                        result = result_df.to_json(orient="records", indent=2)
+                    else:
+                        result = f"Unknown tool: {tool_name}"
+
+                    messages.append({
+                        "role": "tool",
+                        "tool_call_id": call.id,
+                        "content": result,
+                    })
+
+                return self.generate_next_prompt(messages, extra_system_prompt, temperature)
+
+            return message.content.strip()
 
         except Exception as e:
             print(f"Error during API call: {e}")
-            return "Error: Unable to generate summary."
-
+            return "Error: Unable to generate the next prompt."
 
 if __name__ == "__main__":
     generator = SystemPromptGenerator()
     system_prompt = generator.get_system_prompt(category="Misinterpretation - PL")
     system_prompt += "Niech twoje odpowiedzi nie przkraczają 400 znaków."
+
     prompt_gen = PromptGenerator(model=TOGETHER_API_MODEL)
+
+    # Test generate_first_prompt
     generated_prompt = prompt_gen.generate_first_prompt(system_prompt)
-    print(generated_prompt)
+    # print("Generated First Prompt:")
+    # print(generated_prompt)
+
+    # Test generate_next_prompt
+    messages = [
+        {"role": "system", "content": system_prompt},
+        {"role": "user", "content": "Nie masz kasy na GŁÓWNE KONTO."}
+    ]
+    next_prompt = prompt_gen.generate_next_prompt(messages)
+    print("Generated Next Prompt:")
+    print(next_prompt)
