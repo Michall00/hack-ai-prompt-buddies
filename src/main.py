@@ -186,7 +186,7 @@ if __name__ == "__main__":
     with sync_playwright() as playwright:
         system_prompt_generator = SystemPromptGenerator()
         system_prompt = system_prompt_generator.get_system_prompt(
-            category="Misinterpretation - PL"
+            category="Intent Misclassification - PL"
         )
         prompt_generator = PromptGenerator(TOGETHER_API_MODEL)
         system_prompt += "Wiadomości mają być do 400 znaków."
