@@ -9,6 +9,7 @@ from src.utils import log_response, extract_conversation_id
 from src.prompt_genaration.system_prompt_generator import SystemPromptGenerator
 from datetime import datetime
 from enum import Enum, auto
+import random
 
 
 class ResponseType(Enum):
@@ -80,9 +81,6 @@ def run(
     page = login_to_mbank(page, login=login, password=password)
     page = go_to_chat(page)
 
-    # page.locator('[data-test-id="editbox-confirm-btn"]').click()
-    # page.get_by_role("button", name="Zamknij").click()
-
     send_message(page, "[RESET]")
     messages = []
 
@@ -97,9 +95,6 @@ def run(
         "#root div >> mbank-chat-messages-container >> #scrollable-container div"
     )
 
-    # current_response_type = ResponseType
-    # last_response_type = current_response_type
-
     current_message = messages_container_locator.last.inner_text()
     last_message = current_message
 
@@ -112,7 +107,7 @@ def run(
             )
             current_response_type = get_current_response_type(
                 messages_container_locator
-            )  # Get the current response type
+            )
 
             if (
                 current_response_type == ResponseType.MESSAGE
@@ -120,10 +115,9 @@ def run(
             ):
                 while current_message == last_message:
                     sleep(1)
-                    current_message = messages_container_locator.last.inner_text()
+                    current_message = page.locator("#root div >> p.textContent").last.inner_text()
 
                 last_message = current_message
-                #         last_message = text
                 if conversation_id is None:
                     os.makedirs("logs", exist_ok=True)
                     conversation_id = extract_conversation_id(last_message)
@@ -139,7 +133,34 @@ def run(
                 send_message(page, prompt)
                 intput_message = {"role": "assistant", "content": prompt}
                 messages.append(intput_message)
+            elif current_response_type == ResponseType.BUTTONS:
+                chat_buttons = page.locator("chat-button").all()
+                current_message = page.locator("#root div >> p.textContent").last.inner_text()
+                last_message = current_message
+                
+                if conversation_id is None:
+                    os.makedirs("logs", exist_ok=True)
+                    conversation_id = extract_conversation_id(last_message)
+                    log_path = f"logs/{conversation_id}.json"
+                
+                log_response(last_message, sender="bot", log_path=log_path)
+                response = last_message.split("==========")[0].strip()
 
+                for idx, chat_button in enumerate(chat_buttons):
+                    slot_element = chat_button.evaluate_handle("e => e.shadowRoot.querySelector('slot')")
+                    text = slot_element.evaluate("slot => slot.assignedNodes().map(n => n.textContent).join('').trim()")
+                    print(f"Button {idx}: {text}")
+                    response += f"Przycisk {idx+1}: {text}\n"
+                
+                response += "\n" + "Wybierz tekst z przycisków powyżej"
+                mbank_message = {"role": "user", "content": response}
+                messages.append(mbank_message)
+
+                prompt = prompt_generator.generate_next_prompt(messages=messages)
+                log_response(prompt, sender="user", log_path=log_path)
+                send_message(page, prompt)
+                intput_message = {"role": "assistant", "content": prompt}
+                messages.append(intput_message)
             else:
                 print("Waiting for response...")
                 pass
