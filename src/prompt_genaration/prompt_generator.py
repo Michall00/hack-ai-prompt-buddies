@@ -90,7 +90,8 @@ class PromptGenerator:
                 }
             )
         try:
-            messages = self.system_message + messages[-last_k_messages:]
+            if len(messages) > last_k_messages:
+                messages = self.system_message + messages[-last_k_messages:]
             response = self.client.chat.completions.create(
                 model=self.model,
                 messages=messages,
@@ -100,9 +101,8 @@ class PromptGenerator:
             )
 
             message = response.choices[0].message
-            messages.append(message)
 
-            if hasattr(message, "tool_calls"):
+            if hasattr(message, "tool_calls") and len(message.tool_calls) > 0:
                 for call in message.tool_calls:
                     tool_name = call.function.name
                     args = json.loads(call.function.arguments)
@@ -122,7 +122,7 @@ class PromptGenerator:
                         "content": result,
                     })
 
-                return self.generate_next_prompt(messages, extra_system_prompt, temperature)
+                return self.generate_next_prompt(messages=messages, extra_system_prompt=extra_system_prompt, temperature=temperature, last_k_messages=last_k_messages)
 
             return message.content.strip()
 
