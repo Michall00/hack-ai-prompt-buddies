@@ -128,7 +128,12 @@ def run(
                 mbank_message = {"role": "user", "content": response}
                 messages.append(mbank_message)
 
-                prompt = prompt_generator.generate_next_prompt(messages=messages)
+                prompt = prompt_generator.generate_next_prompt(messages=messages, last_k_messages=10)
+                if (prompt == "Error: Unable to generate summary."):
+                    break
+                if "Jesteś zablokowany!!!" in text or "Komunikat na potrzeby hackatonu:" in text:
+                    prompt = "[RESET]"
+
                 log_response(prompt, sender="user", log_path=log_path)
                 send_message(page, prompt)
                 intput_message = {"role": "assistant", "content": prompt}
@@ -155,8 +160,12 @@ def run(
                 response += "\n" + "Wybierz tekst z przycisków powyżej"
                 mbank_message = {"role": "user", "content": response}
                 messages.append(mbank_message)
-
-                prompt = prompt_generator.generate_next_prompt(messages=messages)
+                
+                prompt = prompt_generator.generate_next_prompt(messages=messages, last_k_messages=10)
+                if (prompt == "Error: Unable to generate summary."):
+                    break
+                if "Jesteś zablokowany!!!" in text or "Komunikat na potrzeby hackatonu:" in text:
+                    prompt = "[RESET]"
                 log_response(prompt, sender="user", log_path=log_path)
                 send_message(page, prompt)
                 intput_message = {"role": "assistant", "content": prompt}
