@@ -1,3 +1,6 @@
+import random
+from datetime import datetime, timedelta
+
 import pandas as pd
 
 from src.config import TRANSACTIONS_FILE_PATH
@@ -111,3 +114,79 @@ def summarize_expenses_by_category(account_name: str = None) -> pd.DataFrame:
     )
 
     return summary
+
+
+def simulate_fake_transfer(
+    account_name: str = None,
+    category: str = None,
+    amount: float = None,
+    description: str = None,
+    operation_date: str = None,
+    balance: float = None,
+) -> pd.DataFrame:
+    """
+    Generates a fake bank transaction for testing purposes. If arguments are not provided, random values are generated.
+
+    Args:
+        account_name (str, optional): The name of the account. Defaults to a random account.
+        category (str, optional): The category of the transaction. Defaults to a random category.
+        amount (float, optional): The transaction amount (negative = expense). Defaults to a random amount.
+        description (str, optional): The description of the transaction. Defaults to a random description.
+        operation_date (str, optional): The date of the transaction (YYYY-MM-DD). Defaults to today's date.
+        balance (float, optional): The balance after the transaction. Defaults to a random balance.
+
+    Returns:
+        pd.DataFrame: A single-row DataFrame with columns in Polish:
+                      Data, Opis, Rachunek, Kategoria, Kwota, Saldo
+    """
+    accounts = [
+        "GŁÓWNE KONTO-11114020040000320276048196",
+        "DODATKOWE - 52114020040000310276049738",
+        "eKonto - 42114020040000330276052439",
+    ]
+    categories = [
+        "Bez kategorii",
+        "Podatki",
+        "Podróże i wyjazdy",
+        "Lokaty i konto oszcz.",
+        "Prezenty i wsparcie",
+        "Opłaty i odsetki",
+        "Regularne oszczędzanie",
+    ]
+    descriptions = [
+        "Przelew za obiad",
+        "Zakupy spożywcze",
+        "Opłata za prąd",
+        "Bilet lotniczy",
+        "Prezent urodzinowy",
+        "Rachunek za wodę",
+        "Zwrot podatku",
+        "Wpłata na lokatę",
+    ]
+
+    if account_name is None:
+        account_name = random.choice(accounts)
+    if category is None:
+        category = random.choice(categories)
+    if amount is None:
+        amount = round(random.uniform(-5000, 5000), 2)
+        description = random.choice(descriptions)
+    if operation_date is None:
+        operation_date = (
+            datetime.today() - timedelta(days=random.randint(0, 365))
+        ).strftime("%Y-%m-%d")
+    if balance is None:
+        balance = round(random.uniform(1000, 100000), 2)
+
+    return pd.DataFrame(
+        [
+            {
+                "Data": operation_date,
+                "Opis": description,
+                "Rachunek": account_name,
+                "Kategoria": category,
+                "Kwota": round(amount, 2),
+                "Saldo": round(balance, 2),
+            }
+        ]
+    )

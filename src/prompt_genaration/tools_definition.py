@@ -47,4 +47,45 @@ tools = [
             },
         },
     },
+    {
+        "type": "function",
+        "function": {
+            "name": "simulate_fake_transfer",
+            "description": (
+                "Generates a fake bank transaction for testing purposes. "
+                "If arguments are not provided, random values are generated. "
+                "The returned transaction includes fields such as date, description, account, category, amount, and balance."
+            ),
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "account_name": {
+                        "type": "string",
+                        "description": "Optional. The name of the account. Defaults to a random account, e.g., 'GŁÓWNE KONTO-11114020040000320276048196'.",
+                    },
+                    "category": {
+                        "type": "string",
+                        "description": "Optional. The category of the transaction. Defaults to a random category, e.g., 'Podatki'.",
+                    },
+                    "amount": {
+                        "type": "number",
+                        "description": "Optional. The transaction amount (negative = expense). Defaults to a random amount between -5000 and 5000.",
+                    },
+                    "description": {
+                        "type": "string",
+                        "description": "Optional. The description of the transaction. Defaults to a random description, e.g., 'Zakupy spożywcze'.",
+                    },
+                    "operation_date": {
+                        "type": "string",
+                        "description": "Optional. The date of the transaction in YYYY-MM-DD format. Defaults to a random date within the last year.",
+                    },
+                    "balance": {
+                        "type": "number",
+                        "description": "Optional. The balance after the transaction. Defaults to a random balance between 1000 and 100000.",
+                    },
+                },
+                "required": [],
+            },
+        },
+    },
 ]

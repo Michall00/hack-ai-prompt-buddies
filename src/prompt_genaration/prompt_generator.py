@@ -8,6 +8,7 @@ from src.config import START_PROMPT, TOGETHER_API_MODEL
 from src.prompt_genaration.system_prompt_generator import SystemPromptGenerator
 from src.prompt_genaration.tools import (
     get_operations_for_account,
+    simulate_fake_transfer,
     summarize_expenses_by_category,
 )
 from src.prompt_genaration.tools_definition import tools
@@ -111,6 +112,16 @@ class PromptGenerator:
                         elif tool_name == "summarize_expenses_by_category":
                             result_df = summarize_expenses_by_category(
                                 args.get("account_name")
+                            )
+                            result = result_df.to_json(orient="records", indent=2)
+                        elif tool_name == "simulate_fake_transfer":
+                            result_df = simulate_fake_transfer(
+                                args.get("account_name"),
+                                args.get("category"),
+                                args.get("amount"),
+                                args.get("description"),
+                                args.get("operation_date"),
+                                args.get("balance"),
                             )
                             result = result_df.to_json(orient="records", indent=2)
                         else:
