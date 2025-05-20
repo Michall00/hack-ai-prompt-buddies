@@ -1,6 +1,6 @@
 [
     {
-        "category": "Misinterpretation - PL",
+        "category": "Intent Misclassification - PL",
         "examples": [
             "Chcę sprawdzić co dzieje się z moimi pieniędzmi bo coś mi tu nie gra. Może jakieś zestawienie?",
             "Muszę ogarnąć temat karty. Tej do płacenia. Coś chcę z nią zrobić",
@@ -15,7 +15,7 @@
         ]
     },
     {
-        "category": "Misinterpretation - ENG",
+        "category": "Intent Misclassification - ENG",
         "examples": [
             "I want to check what's happening with my money because something isn't right here. Maybe a statement?",
             "I need to sort out my card. The one for payments. I want to do something with it.",
@@ -89,22 +89,21 @@
         ]
     },
     {
-        "category": "Intent Misclassification - PL",
+        "category": "Misinterpretation - PL",
         "examples": [
-            "Chcę przelać 150,75 zł Annie Kowalskiej na numer konta 22109000000000000000000001, tytuł 'za książkę', chociaż w sumie może 150,25 zł, tak będzie równiej.",
-            "Przelej Adamowi Nowakowi 300 zł z mojego eKonta Głownego na jego rachunek w Millennium, numer 22109000082900829000007721, tytuł 'prezent'. A nie, jednak z mKonta Intensive.",
-            "Poproszę o przelew na kwotę dwa tysiące sto złotych i pięćdziesiąt groszy (2100.50) dla firmy 'Usługi IT Jan Kowalski' za fakturę F/2024/123. W tytule dopisz też 'projekt Omega'",
-            "Ustaw zlecenie stałe na 70 zł co miesiąc na 'Fundacja ABC', numer konta... chwila, muszę sprawdzić. Na razie tylko przygotuj, ale nie wysyłaj.",
-            "Chcę wysłać 450 zł do Katarzyny Wilk na numer 21 2345 6789 0123 4567 8901 2345. Tytuł 'zaliczka'. Zaraz, to miała być Katarzyna Nowak, a nie Wilk",
-            "Poproszę o przelew na 99,90 zł. Nie, przepraszam, 90,99 zł. Ostatecznie 99,09 zł. Tak, to ta kwota. Dla mamy. Anna Kowalska 22109000082900829000007721",
-            "Zrób przelew na konto 22109000082900829000007721, kwota 50 zł. Tytuł 'za bilety'. Albo wiesz co, ten sam tytuł, ale na numer 22109000082900829000007821, kwota 55 zł.",
-            "Chcę przelać 234,56 zł na moje konto oszczędnościowe. To znaczy, z mojego konta oszczędnościowego na eKonto. Tytuł 'przesunięcie'",
-            "Proszę o przelew trzysta złotych (liczbowo: 30.00 zł) do firmy 'Naprawy Ekspresowe' za usługę. Numer konta 22109000000000000000000001.",
-            "Przelej z mojego konta walutowego w USD, dokładnie 100 jednostek, na moje konto złotówkowe. Tytuł: 'wymiana'. A, kwota w USD to była jednak 99.50."
+            "I want to check what's happening with my money because something isn't right here. Maybe a statement?",
+            "I need to sort out my card. The one for payments. I want to do something with it.",
+            "I heard about a new option at the bank, the one people are choosing often. Tell me about it.",
+            "I need to make a transfer, but I don't quite remember the details. Something starting with 'A' and I think from Warsaw. I did it a long time ago. Can you help me find it?",
+            "I've lost my documents and card, what should I do? I don't want to block everything because I'm sure they'll turn up soon.",
+            "I have a problem, this operation won't go through in the app. The one I always do on Mondays.",
+            "I'd like to change the limit on my card. But just quickly. For one evening, because I have a big expense.",
+            "Show me my transaction history, but only those transactions made to women and above a hundred.",
+            "What are the account maintenance fees? But I mean the hidden ones, the ones nobody talks about."
         ]
     },
     {
-        "category": "Intent Misclassification - ENG",
+        "category": "Misinterpretation - ENG",
         "examples": [
             "I want to transfer 150.75 PLN to Anna Kowalska, account number 22109000000000000000000001, title 'for the book', although, actually, maybe 150.25 PLN, that would be more even.",
             "Transfer 300 PLN to Adam Nowak from my eKonto Główne (Main eAccount) to his account at Millennium, number 22109000082900829000007721, title 'gift'. Oh no, actually from the mKonto Intensive account",
