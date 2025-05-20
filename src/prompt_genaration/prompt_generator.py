@@ -1,3 +1,4 @@
+import json
 from typing import Optional
 
 from together import Together
@@ -5,11 +6,10 @@ from together import Together
 from src.config import START_PROMPT, TOGETHER_API_MODEL
 from src.prompt_genaration.system_prompt_generator import SystemPromptGenerator
 from src.prompt_genaration.tools import (
-    tools,
     get_operations_for_account,
     summarize_expenses_by_category,
 )
-import json
+from src.prompt_genaration.tools_definition import tools
 
 
 class PromptGenerator:
