@@ -89,6 +89,7 @@ def run(
     message = {"role": "system", "content": system_prompt}
 
     messages.append(message)
+
     send_message(page, prompt)
 
     messages_container_locator = page.locator(
@@ -99,6 +100,7 @@ def run(
     last_message = current_message
 
     conversation_id = None
+    time = datetime.now()
 
     while True:
         try:
@@ -173,7 +175,6 @@ def run(
             else:
                 print("Waiting for response...")
                 pass
-
         except KeyboardInterrupt:
             print("Exiting...")
             break
@@ -192,6 +193,7 @@ if __name__ == "__main__":
             category="Misinterpretation - PL"
         )
         prompt_generator = PromptGenerator(TOGETHER_API_MODEL)
+        system_prompt += "Wiadomości mają być do 400 znaków."
         run(
             playwright,
             prompt_generator=prompt_generator,

@@ -16,6 +16,7 @@ class PromptGenerator:
         """
         self.client = Together()
         self.model = model
+        self.system_message = None
 
     def generate_first_prompt(
         self,
@@ -34,6 +35,10 @@ class PromptGenerator:
         Returns:
             str: The generated prompt.
         """
+        self.system_message = [{
+                "role": "system",
+                "content": system_prompt,
+        }]
 
         messages = [
             {
@@ -59,6 +64,7 @@ class PromptGenerator:
         self,
         messages: list[dict],
         extra_system_prompt: str = "",
+        last_k_messages: int = 10,
         temperature: Optional[float] = None,
     ) -> str:
         """
@@ -80,6 +86,7 @@ class PromptGenerator:
                 }
             )
         try:
+            messages = self.system_message + messages[-last_k_messages:]
             response = self.client.chat.completions.create(
                 model=self.model, messages=messages, temperature=temperature
             )
