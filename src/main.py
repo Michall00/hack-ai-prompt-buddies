@@ -92,6 +92,8 @@ def run(
 
     send_message(page, prompt)
 
+    sleep(10)
+
     messages_container_locator = page.locator(
         "#root div >> mbank-chat-messages-container >> #scrollable-container div"
     )
@@ -101,6 +103,10 @@ def run(
     conversation_id = None
     timeStamp = datetime.now()
 
+    if conversation_id is None:
+        os.makedirs("logs", exist_ok=True)
+        log_path = f"logs/{conversation_id}_time_{timeStamp}.json"
+    
     while True:
         try:
             messages_container_locator = page.locator(
@@ -109,18 +115,16 @@ def run(
             current_response_type = get_current_response_type(
                 messages_container_locator
             )
-            sleep(15)
+            while current_message == last_message:
+                sleep(1)
+                current_message = page.locator("#root div >> p.textContent").last.inner_text()
             
             if (
                 current_response_type == ResponseType.MESSAGE
                 or current_response_type == ResponseType.RESET
             ):
-
+                current_message = page.locator("#root div >> p.textContent").last.inner_text()
                 last_message = current_message
-                if conversation_id is None:
-                    os.makedirs("logs", exist_ok=True)
-                    conversation_id = extract_conversation_id(last_message)
-                    log_path = f"logs/{conversation_id}_time_{timeStamp}.json"
 
                 log_response(last_message, sender="bot", log_path=log_path)
                 response = last_message.split("==========")[0].strip()
@@ -141,11 +145,6 @@ def run(
                 chat_buttons = page.locator("chat-button").all()
                 current_message = page.locator("#root div >> p.textContent").last.inner_text()
                 last_message = current_message
-                
-                if conversation_id is None:
-                    os.makedirs("logs", exist_ok=True)
-                    conversation_id = extract_conversation_id(last_message)
-                    log_path = f"logs/{conversation_id}_time_{timeStamp }.json"
                 
                 log_response(last_message, sender="bot", log_path=log_path)
                 response = last_message.split("==========")[0].strip()
