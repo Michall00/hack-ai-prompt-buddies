@@ -18,7 +18,10 @@ from src.prompt_genaration.tools_definition import tools
 
 
 class PromptGenerator:
-    def __init__(self, model: str):
+    def __init__(
+            self, 
+            model: str,
+            category: str = "Misinterpretation - PL",):
         """
         Inicialize the PromptGenerator with the specified model.
 
@@ -28,10 +31,23 @@ class PromptGenerator:
         self.client = Together()
         self.model = model
         self.tools = tools
+        self.system_prompt_generator = SystemPromptGenerator()
+        self.system_prompt = self.system_prompt_generator.get_system_prompt(category=category)
+
+    def get_system_prompt(self, category: str) -> str:
+        """
+        Get the system prompt based on the category.
+
+        Args:
+            category (str): The category for which to generate the system prompt.
+
+        Returns:
+            str: The generated system prompt.
+        """
+        return self.system_prompt_generator.get_system_prompt(category=category)
 
     def generate_first_prompt(
         self,
-        system_prompt: str,
         mbank_start_text: str = START_PROMPT,
         temperature: Optional[float] = None,
     ) -> str:
@@ -39,7 +55,6 @@ class PromptGenerator:
         Generate the first prompt using the system prompt.
 
         Args:
-            system_prompt (str): The system prompt to be used.
             mbank_start_text (str): The starting text for mBank.
             temperature (float, optional): The temperature for the generation. Default is None.
 
@@ -50,7 +65,7 @@ class PromptGenerator:
         messages = [
             {
                 "role": "system",
-                "content": system_prompt,
+                "content": self.system_prompt,
             },
             {
                 "role": "user",
@@ -67,7 +82,7 @@ class PromptGenerator:
             print(f"Error during API call: {e}")
             return "Error: Unable to generate summary."
 
-    def _add_system_prompt(
+    def _add_extra_prompt(
         self, messages: list[dict], extra_system_prompt: Optional[str]
     ) -> None:
         """
@@ -80,6 +95,19 @@ class PromptGenerator:
         if extra_system_prompt:
             messages.append({"role": "system", "content": extra_system_prompt})
 
+    def _add_system_prompt(self, messages: list[dict]) -> None:
+        """
+        Adds the system prompt to the messages.
+
+        Args:
+            messages (list[dict]): A list of message dictionaries for the conversation.
+        """
+        message = {
+            "role": "system",
+            "content": self.system_prompt,
+        }
+        return [message] + messages
+
     def _call_together_api(self, messages: list[dict], temperature: Optional[float]):
         """
         Calls the Together API with the provided messages.
@@ -91,6 +119,7 @@ class PromptGenerator:
         Returns:
             Response: The response from the Together API.
         """
+        messages = self._add_system_prompt(messages)
         return self.client.chat.completions.create(
             model=self.model,
             messages=messages,
@@ -202,8 +231,8 @@ class PromptGenerator:
 
         Returns:
             str: The generated response or tool result.
-        """
-        self._add_system_prompt(messages, extra_system_prompt)
+        """        
+        self._add_extra_prompt(messages, extra_system_prompt)
 
         while len(messages) > 1:
             try:
