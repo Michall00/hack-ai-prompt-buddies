@@ -58,7 +58,7 @@ docs_build:
 ## Run app for evaluation
 .PHONY: run_evaluation
 run_evaluation:
-	uv run src/app.py
+	uv run streamlit run src/app.py
 
 ## Run main script
 .PHONY: run
