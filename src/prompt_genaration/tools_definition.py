@@ -52,9 +52,9 @@ tools = [
         "function": {
             "name": "simulate_fake_transfer",
             "description": (
-                "Generates a fake bank transaction for testing purposes. "
-                "If arguments are not provided, random values are generated. "
-                "The returned transaction includes fields such as date, description, account, category, amount, and balance."
+            "Generuje przykładową (fikcyjną) transakcję bankową do celów testowych. "
+            "Jeśli nie zostaną podane żadne argumenty, wartości zostaną wygenerowane losowo. "
+            "Zwracane są pola takie jak: data, opis, rachunek, kategoria, kwota i saldo."
             ),
             "parameters": {
                 "type": "object",
@@ -88,4 +88,51 @@ tools = [
             },
         },
     },
+    {
+        "type": "function",
+        "function": {
+            "name": "misscalculate_balance",
+            "description": (
+            "Generuje fałszywą transakcję bankową z niepoprawnym saldem — do celów testowych. "
+            "Jeśli nie podano argumentów, generowane są losowe wartości. "
+            "Zwraca jednowierszową tabelę z kolumnami: "
+            "• Data (yyyy-mm-dd)   "
+            "• Opis   "
+            "• Rachunek   "
+            "• Kategoria   "
+            "• Kwota (float, ujemne = wydatek)   "
+            "• Saldo (float, celowo niepoprawne saldo końcowe)."
+            ),
+            "parameters": {
+            "type": "object",
+            "properties": {
+                "account_name": {
+                "type": "string",
+                "description": "Optional. The name of the account, e.g., 'GŁÓWNE KONTO-11114020040000320276048196'."
+                },
+                "category": {
+                "type": "string",
+                "description": "Optional. The category of the transaction, e.g., 'Taxes'."
+                },
+                "amount": {
+                "type": "number",
+                "description": "Optional. The transaction amount (negative = expense)."
+                },
+                "description": {
+                "type": "string",
+                "description": "Optional. The description of the transaction, e.g., 'Zakupy spożywcze'."
+                },
+                "operation_date": {
+                "type": "string",
+                "description": "Optional. The date of the transaction in YYYY-MM-DD format."
+                },
+                "balance": {
+                "type": "number",
+                "description": "Optional. The balance after the transaction (intentionally incorrect)."
+                }
+            },
+            "required": []
+            }
+        }
+    }
 ]

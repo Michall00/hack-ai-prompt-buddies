@@ -10,6 +10,7 @@ from src.prompt_genaration.tools import (
     get_operations_for_account,
     simulate_fake_transfer,
     summarize_expenses_by_category,
+    misscalculate_balance
 )
 from src.prompt_genaration.tools_definition import tools
 
@@ -116,6 +117,16 @@ class PromptGenerator:
                             result = result_df.to_json(orient="records", indent=2)
                         elif tool_name == "simulate_fake_transfer":
                             result_df = simulate_fake_transfer(
+                                args.get("account_name"),
+                                args.get("category"),
+                                args.get("amount"),
+                                args.get("description"),
+                                args.get("operation_date"),
+                                args.get("balance"),
+                            )
+                            result = result_df.to_json(orient="records", indent=2)
+                        elif tool_name == "misscalculate_balance":
+                            result_df = misscalculate_balance(
                                 args.get("account_name"),
                                 args.get("category"),
                                 args.get("amount"),

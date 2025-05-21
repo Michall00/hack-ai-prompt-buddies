@@ -131,7 +131,7 @@ def run(
                 mbank_message = {"role": "user", "content": response}
                 messages.append(mbank_message)
 
-                prompt = prompt_generator.generate_next_prompt(messages=messages, last_k_messages=10)
+                prompt = prompt_generator.generate_next_prompt(messages=messages)
                 if (prompt == "Error: Unable to generate summary."):
                     break
                 if "Jesteś zablokowany!!!" in current_message or "Komunikat na potrzeby hackatonu:" in current_message:
@@ -153,13 +153,13 @@ def run(
                     slot_element = chat_button.evaluate_handle("e => e.shadowRoot.querySelector('slot')")
                     text = slot_element.evaluate("slot => slot.assignedNodes().map(n => n.textContent).join('').trim()")
                     print(f"Button {idx}: {text}")
-                    response += f"Przycisk {idx+1}: {text}\n"
+                    response += f"Przycisk {idx+1} - {text}\n"
                 
                 response += "\n" + "Wybierz tekst z przycisków powyżej"
                 mbank_message = {"role": "user", "content": response}
                 messages.append(mbank_message)
                 
-                prompt = prompt_generator.generate_next_prompt(messages=messages, last_k_messages=10)
+                prompt = prompt_generator.generate_next_prompt(messages=messages)
                 if (prompt == "Error: Unable to generate summary."):
                     break
                 
@@ -189,6 +189,7 @@ if __name__ == "__main__":
         )
         prompt_generator = PromptGenerator(TOGETHER_API_MODEL)
         system_prompt += "Wiadomości mają być do 400 znaków."
+        system_prompt += "Jeśli na wejściu dostaniesz wiadomość, polega na wyborze z przycisków, to odpowiedz tylko na podstawie przycisków."
         run(
             playwright,
             prompt_generator=prompt_generator,
