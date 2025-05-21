@@ -1,4 +1,19 @@
 import json
+import os
+from datetime import datetime
+
+
+def create_log_file() -> str:
+    """
+    Creates a log file if it doesn't exist.
+
+    Args:
+        log_path (str): Path to the log file.
+    """
+    timeStamp = datetime.now()
+    os.makedirs("logs", exist_ok=True)
+    log_path = f"time_{timeStamp}.json"
+    return log_path
 
 
 def log_response(

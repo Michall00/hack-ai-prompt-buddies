@@ -1,12 +1,10 @@
 from dotenv import load_dotenv
 import os
-from playwright.sync_api import Playwright, sync_playwright
+from playwright.sync_api import Playwright, sync_playwright, Page
 from time import sleep
 from src.prompt_genaration.prompt_generator import PromptGenerator
 from src.config import TOGETHER_API_MODEL, BASE_PAGE_URL
-from src.utils.logging_utils import log_response
-from datetime import datetime
-from enum import Enum, auto
+from src.utils.logging_utils import log_response, create_log_file
 from src.wolf_selector.wolf_selector import WolfSelector
 from src.utils.ui_utils import login_to_mbank, go_to_chat, send_message, get_current_response_type, reset_conversation
 from src.utils.ui_utils import ResponseType
@@ -19,6 +17,7 @@ def run(
     good_prompt_generator: PromptGenerator,
     login: str,
     password: str,
+    log_path: str,
 ) -> None:
     browser = playwright.chromium.launch(headless=False)
     context = browser.new_context()
@@ -28,20 +27,14 @@ def run(
     page = login_to_mbank(page, login=login, password=password)
     page = go_to_chat(page)
     page = reset_conversation(page)
-    
+
     messages = []
-
     prompt = good_prompt_generator.generate_first_prompt()
-
-    messages.append(
-        {
+    messages.append({
             "role": "assistant",
             "content": prompt
-        }
-    )
-
+    })
     send_message(page, prompt)
-
     sleep(1)
 
     messages_container_locator = page.locator(
@@ -49,13 +42,6 @@ def run(
     )
     current_message = page.locator("#root div >> p.textContent").last.inner_text()
     last_message = current_message
-
-    conversation_id = None
-    timeStamp = datetime.now()
-
-    if conversation_id is None:
-        os.makedirs("logs", exist_ok=True)
-        log_path = f"logs/{conversation_id}_time_{timeStamp}.json"
     
     while True:
         try:
@@ -147,8 +133,9 @@ if __name__ == "__main__":
     with sync_playwright() as playwright:
         good_prompt_generator = PromptGenerator(TOGETHER_API_MODEL, category="Bot Calming - PL")
         bad_prompt_generator = PromptGenerator(TOGETHER_API_MODEL, category="Active Manipulation - PL")
-        
         wolf_selector = WolfSelector(model=TOGETHER_API_MODEL)
+
+        log_path = create_log_file()
         run(
             playwright,
             wolf_selector=wolf_selector,
@@ -156,4 +143,5 @@ if __name__ == "__main__":
             bad_prompt_generator=bad_prompt_generator,
             login=login,
             password=password,
+            log_path=log_path,
         )
