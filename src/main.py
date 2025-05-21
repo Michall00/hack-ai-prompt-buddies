@@ -10,6 +10,7 @@ from src.prompt_genaration.system_prompt_generator import SystemPromptGenerator
 from datetime import datetime
 from enum import Enum, auto
 import random
+from src.wolf_selector.wolf_selector import WolfSelector
 
 
 class ResponseType(Enum):
@@ -68,7 +69,9 @@ def get_current_response_type(locator) -> ResponseType:
 
 def run(
     playwright: Playwright,
-    prompt_generator: PromptGenerator,
+    wolf_selector: WolfSelector,
+    bad_prompt_generator: PromptGenerator,
+    good_prompt_generator: PromptGenerator,
     system_prompt: str,
     login: str,
     password: str,
@@ -84,7 +87,7 @@ def run(
     send_message(page, "[RESET]")
     messages = []
 
-    prompt = prompt_generator.generate_first_prompt(system_prompt=system_prompt)
+    prompt = good_prompt_generator.generate_first_prompt(system_prompt=system_prompt)
 
     message = {"role": "system", "content": system_prompt}
 
@@ -92,7 +95,7 @@ def run(
 
     send_message(page, prompt)
 
-    sleep(10)
+    sleep(1)
 
     messages_container_locator = page.locator(
         "#root div >> mbank-chat-messages-container >> #scrollable-container div"
@@ -131,7 +134,13 @@ def run(
                 mbank_message = {"role": "user", "content": response}
                 messages.append(mbank_message)
 
-                prompt = prompt_generator.generate_next_prompt(messages=messages)
+                choosen_model = wolf_selector.choose_model(messages=messages)
+                if choosen_model == "good":
+                    print(f"Good model selected")
+                    prompt = good_prompt_generator.generate_next_prompt(messages=messages)
+                elif choosen_model == "bad":
+                    print(f"Bad model selected")
+                    prompt = bad_prompt_generator.generate_next_prompt(messages=messages)
                 if (prompt == "Error: Unable to generate summary."):
                     break
                 if "Jesteś zablokowany!!!" in current_message or "Komunikat na potrzeby hackatonu:" in current_message:
@@ -159,7 +168,13 @@ def run(
                 mbank_message = {"role": "user", "content": response}
                 messages.append(mbank_message)
                 
-                prompt = prompt_generator.generate_next_prompt(messages=messages)
+                choosen_model = wolf_selector.choose_model(messages=messages)
+                if choosen_model == "good":
+                    print(f"Good model selected")
+                    prompt = good_prompt_generator.generate_next_prompt(messages=messages)
+                elif choosen_model == "bad":
+                    print(f"Bad model selected")
+                    prompt = bad_prompt_generator.generate_next_prompt(messages=messages)
                 if (prompt == "Error: Unable to generate summary."):
                     break
                 
@@ -184,16 +199,28 @@ if __name__ == "__main__":
     password = os.getenv("PASSWORD")
     with sync_playwright() as playwright:
         system_prompt_generator = SystemPromptGenerator()
-        system_prompt = system_prompt_generator.get_system_prompt(
+        bad_system_prompt = system_prompt_generator.get_system_prompt(
             category="Intent Misclassification - PL"
         )
-        prompt_generator = PromptGenerator(TOGETHER_API_MODEL)
-        system_prompt += "Wiadomości mają być do 400 znaków."
-        system_prompt += "Jeśli na wejściu dostaniesz wiadomość, polega na wyborze z przycisków, to odpowiedz tylko na podstawie przycisków."
+        good_system_prompt = system_prompt_generator.get_system_prompt(
+            category="Bot Calming - PL"
+        )
+
+        good_prompt_generator = PromptGenerator(TOGETHER_API_MODEL)
+        good_system_prompt += "Wiadomości mają być do 400 znaków."
+        good_system_prompt += "Jeśli na wejściu dostaniesz wiadomość, polega na wyborze z przycisków, to odpowiedz tylko na podstawie przycisków."
+
+        bad_prompt_generator = PromptGenerator(TOGETHER_API_MODEL)
+        bad_system_prompt += "Wiadomości mają być do 400 znaków."
+        bad_system_prompt += "Jeśli na wejściu dostaniesz wiadomość, polega na wyborze z przycisków, to odpowiedz tylko na podstawie przycisków."
+        
+        wolf_selector = WolfSelector(model=TOGETHER_API_MODEL)
         run(
             playwright,
-            prompt_generator=prompt_generator,
-            system_prompt=system_prompt,
+            wolf_selector=wolf_selector,
+            good_prompt_generator=good_prompt_generator,
+            bad_prompt_generator=bad_prompt_generator,
+            system_prompt=good_system_prompt,
             login=login,
             password=password,
         )
