@@ -288,18 +288,9 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#using-azure-openai-api" class="md-nav__link">
+  <a href="#env" class="md-nav__link">
     <span class="md-ellipsis">
-      ▶️ Using Azure OpenAI API
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#using-a-local-model" class="md-nav__link">
-    <span class="md-ellipsis">
-      ▶️ Using a Local Model
+      env
     </span>
   </a>
   
@@ -311,29 +302,35 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#step-1-prepare-knowladge-base" class="md-nav__link">
+  <a href="#have-fun" class="md-nav__link">
     <span class="md-ellipsis">
-      Step 1: Prepare Knowladge Base
+      Have fun
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Have fun">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#automate-chat-with-mbank" class="md-nav__link">
+    <span class="md-ellipsis">
+      Automate chat with mBank
     </span>
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
-  <a href="#step-2-inference-with-system" class="md-nav__link">
+        
+          <li class="md-nav__item">
+  <a href="#run-evaluation-app" class="md-nav__link">
     <span class="md-ellipsis">
-      Step 2: Inference with System
+      Run evaluation app
     </span>
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
-  <a href="#step-3optional-replicate-experiment" class="md-nav__link">
-    <span class="md-ellipsis">
-      Step 3:(Optional) Replicate Experiment
-    </span>
-  </a>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -495,18 +492,9 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#using-azure-openai-api" class="md-nav__link">
+  <a href="#env" class="md-nav__link">
     <span class="md-ellipsis">
-      ▶️ Using Azure OpenAI API
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#using-a-local-model" class="md-nav__link">
-    <span class="md-ellipsis">
-      ▶️ Using a Local Model
+      env
     </span>
   </a>
   
@@ -518,29 +506,35 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#step-1-prepare-knowladge-base" class="md-nav__link">
+  <a href="#have-fun" class="md-nav__link">
     <span class="md-ellipsis">
-      Step 1: Prepare Knowladge Base
+      Have fun
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Have fun">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#automate-chat-with-mbank" class="md-nav__link">
+    <span class="md-ellipsis">
+      Automate chat with mBank
     </span>
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
-  <a href="#step-2-inference-with-system" class="md-nav__link">
+        
+          <li class="md-nav__item">
+  <a href="#run-evaluation-app" class="md-nav__link">
     <span class="md-ellipsis">
-      Step 2: Inference with System
+      Run evaluation app
     </span>
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
-  <a href="#step-3optional-replicate-experiment" class="md-nav__link">
-    <span class="md-ellipsis">
-      Step 3:(Optional) Replicate Experiment
-    </span>
-  </a>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -567,35 +561,18 @@
 </code></pre>
 <pre><code class="language-sh">make requirements
 </code></pre>
-<p>By default, the system uses the <strong>OpenAI API</strong> to generate natural language summaries of retrieved code files.</p>
-<h4 id="using-azure-openai-api">▶️ Using Azure OpenAI API</h4>
-<p>To enable Azure OpenAI-based summaries:</p>
-<ol>
-<li>Create a <code>.env</code> file in the project root directory.</li>
-<li>Add your Azure OpenAI credentials:
-   ```env
-   AZURE_OPENAI_KEY=your-api-key-here
-   AZURE_OPENAI_ENDPOINT=https://your-resource-name.openai.azure.com/
-   AZURE_OPENAI_DEPLOYMENT_NAME=your-deployment-name</li>
-<li>Make sure you have billing enabled</li>
-</ol>
-<h4 id="using-a-local-model">▶️ Using a Local Model</h4>
-<p>If you prefer to use a local LLM instead of the OpenAI API:
-1. open <code>config.py</code>
-2. set <code>USE_OPENAI = False</code>
-3. Optionally configure <code>SUMMARY_MODEL</code> and <code>DEVICE</code>
-<strong>Note: On first use, the model will be downloaded from Hugging Face. This may take a few minutes depending on your internet speed</strong></p>
-<h2 id="step-1-prepare-knowladge-base">Step 1: Prepare Knowladge Base</h2>
-<pre><code class="language-sh">make prepare_kb
+<h3 id="env">env</h3>
+<p>create .env file in main directory and fill</p>
+<pre><code class="language-bash">TOGETHER_API_KEY = ...
+DOpisać
 </code></pre>
-<h2 id="step-2-inference-with-system">Step 2: Inference with System</h2>
-<p>run</p>
-<pre><code class="language-sh">uv run src/main.py
+<h2 id="have-fun">Have fun</h2>
+<h3 id="automate-chat-with-mbank">Automate chat with mBank</h3>
+<pre><code class="language-sh">make run
 </code></pre>
-<p>Now you can input your question, and the system will return an answer with paths to the relevant files.</p>
-<h2 id="step-3optional-replicate-experiment">Step 3:(Optional) Replicate Experiment</h2>
-<p>You can reproduce experiments by preparing validation dataset by downloading file from <a href="https://drive.google.com/file/d/1PiiordcQJwgv4MfT1vl-Omn8DeCdlAB3/view">here</a> and saving it as <code>/data/escrcpy_val.json</code>. Then you can run <code>make hyperparameter_experiment</code> and <code>make query_expansion_experiment</code> or even <code>make reranker_experiment</code>.
-<strong>Important</strong> - before running experiment you need to do step 1 Prepare Knowladge Base</p>
+<h3 id="run-evaluation-app">Run evaluation app</h3>
+<pre><code class="language-sh">make run_evaluation
+</code></pre>
 
 
 
