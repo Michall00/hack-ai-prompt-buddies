@@ -1,4 +1,5 @@
 import os
+import sys
 from playwright.sync_api import Playwright, Page
 from playwright.sync_api import sync_playwright
 from dotenv import load_dotenv
@@ -78,6 +79,9 @@ def run(
         except KeyboardInterrupt:
             logger.info("Exiting...")
             break
+        except Exception as e:
+            logger.error(f"An error occurred: {e}")
+            os.execv(sys.executable, ["python"] + sys.argv)
 
     logger.info("Shutting down browser and context")
     context.close()
@@ -119,15 +123,7 @@ def process_text_response(
 
     if any(warning in current_message for warning in ["Jesteś zablokowany!!!", "Komunikat na potrzeby hackatonu:"]):
         logger.warning("Bot triggered reset condition")
-        prompt = "[RESET]"
-        send_message(page, prompt)
-        log_path = create_log_file()
-        chat = ChatHistory()
-        logger.info("Chat history reset. Started new conversation.")
-        prompt = good_prompt_generator.generate_first_prompt()
-        chat.append_assistant(prompt)
-        send_message(page, prompt)
-        return True
+        os.execv(sys.executable, ["python"] + sys.argv)
 
     log_response(prompt, sender="user", log_path=log_path)
     send_message(page, prompt)
