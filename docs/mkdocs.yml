@@ -1,0 +1,26 @@
+site_name: "mBank Hacker"
+theme:
+  name: "material"
+  palette:
+    primary: 'indigo'
+    accent: 'indigo'
+  font:
+    text: 'Roboto'
+    code: 'Roboto Mono'
+plugins:
+  - search
+  - mkdocstrings:
+      handlers:
+        python:
+          options:
+            docstring_style: google
+nav:
+  - Home: index.md
+  - Getting Started: getting-started.md
+  - Commands: commands.md
+  - API Reference:
+      - Prompt generation: src/prompt_generation.md
+      - mBank chat handler: src/mBank_chat_handler.md
+
+site_author: Prompt Buddies
+# 
