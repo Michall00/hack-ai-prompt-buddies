@@ -3,93 +3,13 @@ import os
 from playwright.sync_api import Playwright, sync_playwright
 from time import sleep
 from src.prompt_genaration.prompt_generator import PromptGenerator
-from src.config import TOGETHER_API_MODEL
+from src.config import TOGETHER_API_MODEL, BASE_PAGE_URL
 from src.utils.logging_utils import log_response
 from datetime import datetime
 from enum import Enum, auto
 from src.wolf_selector.wolf_selector import WolfSelector
-
-
-class ResponseType(Enum):
-    MESSAGE = auto()
-    BUTTONS = auto()
-    RESET = auto()
-    UNKNOWN = auto()
-
-
-def send_message(page: Playwright, message: str) -> None:
-    """
-    Send a message in the chat.
-    Args:
-        page (Playwright): The Playwright page object.
-        message (str): The message to send.
-    """
-    page.locator('[data-test-id="chat\\:textbox"]').click()
-    page.locator('[data-test-id="chat\\:textbox"]').fill(message)
-    page.locator('[data-test-id="chat\\:textbox-send"]').click()
-
-
-def login_to_mbank(page: Playwright, login: str, password: str) -> Playwright:
-    """
-    Log in to mBank.
-    Args:
-        page (Playwright): The Playwright page object.
-        login (str): The login ID.
-        password (str): The password.
-    Returns:
-        page (Playwright): The Playwright page object after logging in.
-    """
-    page.get_by_role("textbox", name="Identyfikator").click()
-    page.get_by_role("textbox", name="Identyfikator").fill(login)
-
-    page.get_by_role("textbox", name="Hasło").click()
-    page.get_by_role("textbox", name="Hasło").fill(password)
-
-    page.get_by_role("button", name="Zaloguj się").wait_for(state="visible")
-    page.get_by_role("button", name="Zaloguj się").click(force=True)
-
-    page.get_by_role("textbox", name="Kod SMS").wait_for(state="visible", timeout=60000)
-    page.get_by_role("textbox", name="kod SMS").click()
-    page.get_by_role("textbox", name="kod SMS").fill("77777777")
-
-    return page
-
-
-def go_to_chat(page: Playwright) -> Playwright:
-    """
-    Go to the chat section of mBank.
-    Args:
-        page (Playwright): The Playwright page object.
-    Returns:
-        page (Playwright): The Playwright page object after navigating to the chat.
-    """
-    page.locator('[data-test-id="editbox-confirm-btn"]').click()
-    page.get_by_role("button", name="Zamknij").click()
-    page.locator('[data-test-id="chat\\:chat-icon"]').click()
-    page.get_by_role("tab", name="napisz na czacie").click()
-    return page
-
-
-def get_current_response_type(locator) -> ResponseType:
-    """
-    Get the type of response from the chat.
-    Args:
-        locator: The locator for the chat messages.
-    Returns:
-        ResponseType: The type of response (MESSAGE, BUTTONS, RESET, UNKNOWN).
-    """
-    print(f"locator type: {type(locator)}")
-    last_element = locator.last
-    last_element_class = last_element.evaluate("element => element.className")
-
-    if last_element_class == "bot singlenogroup":
-        return ResponseType.MESSAGE
-    elif last_element_class == "container":  # Assuming this class indicates buttons
-        return ResponseType.BUTTONS
-    elif last_element_class == "state":
-        return ResponseType.RESET
-    else:
-        return ResponseType.UNKNOWN
+from src.utils.ui_utils import login_to_mbank, go_to_chat, send_message, get_current_response_type, reset_conversation
+from src.utils.ui_utils import ResponseType
 
 
 def run(
@@ -103,12 +23,12 @@ def run(
     browser = playwright.chromium.launch(headless=False)
     context = browser.new_context()
     page = context.new_page()
-    page.goto("https://urev.online.mbank.pl/pl/Login")
+    page.goto(BASE_PAGE_URL)
 
     page = login_to_mbank(page, login=login, password=password)
     page = go_to_chat(page)
-
-    send_message(page, "[RESET]")
+    page = reset_conversation(page)
+    
     messages = []
 
     prompt = good_prompt_generator.generate_first_prompt()

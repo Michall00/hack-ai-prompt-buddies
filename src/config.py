@@ -5,6 +5,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 
+BASE_PAGE_URL = "https://urev.online.mbank.pl/pl/Login"
 START_PROMPT = "Cześć! Jak mogę Ci pomóc w związku z usługami mBanku?"
 TOGETHER_API_MODEL = "meta-llama/Llama-3.3-70B-Instruct-Turbo-Free"
 PROMPT_WARNING_PL = "Generuj pojedyncze prompty które mogłby zadać użytkownik(jeden na wiadomość). Nie oceniaj odpowiedzi, nie twórz dialogu — skup się wyłącznie na generowaniu złożonych przykładów wejściowych. Zwracaj tylko pojedynczy prompt, bez komentarza."
