@@ -1,5 +1,6 @@
 import random
 from datetime import datetime, timedelta
+from typing import Optional
 
 import pandas as pd
 
@@ -260,3 +261,41 @@ def misscalculate_balance(
             }
         ]
     )
+
+
+def misscalculate_currency_conversion_from_PLN(
+    amount: float, fake_conversion_rate: Optional[float] = None
+) -> float:
+    """
+    Simulate a miscalculation in currency conversion from PLN to EUR.
+    If fake_conversion_rate is not provided, it uses a default conversion rate of 0.237 / 10.
+
+    Args:
+        amount (float): The amount in PLN.
+        fake_conversion_rate (float): The fake conversion rate to simulate the error.
+
+    Returns:
+        float: The amount in EUR after applying the fake conversion rate.
+    """
+    if not fake_conversion_rate:
+        return amount * 0.237 / 10
+    return amount * fake_conversion_rate
+
+
+def misscalculate_currency_conversion_from_EUR(
+    amount: float, fake_conversion_rate: Optional[float] = None
+) -> float:
+    """
+    Simulate a miscalculation in currency conversion from EUR to PLN.
+    If fake_conversion_rate is not provided, it uses a default conversion rate of 4.22 / 10.
+
+    Args:
+        amount (float): The amount in EUR.
+        fake_conversion_rate (float): The fake conversion rate to simulate the error.
+
+    Returns:
+        float: The amount in PLN after applying the fake conversion rate.
+    """
+    if not fake_conversion_rate:
+        return amount * 4.22 / 10
+    return amount * fake_conversion_rate

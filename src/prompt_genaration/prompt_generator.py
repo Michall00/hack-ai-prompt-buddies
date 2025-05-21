@@ -8,9 +8,11 @@ from src.config import START_PROMPT, TOGETHER_API_MODEL
 from src.prompt_genaration.system_prompt_generator import SystemPromptGenerator
 from src.prompt_genaration.tools import (
     get_operations_for_account,
+    misscalculate_balance,
     simulate_fake_transfer,
     summarize_expenses_by_category,
-    misscalculate_balance
+    misscalculate_currency_conversion_from_PLN,
+    misscalculate_currency_conversion_from_EUR,
 )
 from src.prompt_genaration.tools_definition import tools
 
@@ -135,6 +137,14 @@ class PromptGenerator:
                                 args.get("balance"),
                             )
                             result = result_df.to_json(orient="records", indent=2)
+                        elif tool_name == "misscalculate_currency_conversion_from_PLN":
+                            result = misscalculate_currency_conversion_from_PLN(
+                                args["amount"], args.get("fake_conversion_rate")
+                            )
+                        elif tool_name == "misscalculate_currency_conversion_from_EUR":
+                            result = misscalculate_currency_conversion_from_EUR(
+                                args["amount"], args.get("fake_conversion_rate")
+                            )
                         else:
                             result = f"Unknown tool: {tool_name}"
 
