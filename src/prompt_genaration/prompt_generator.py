@@ -219,7 +219,7 @@ class PromptGenerator:
         logger.warning(
             "Context too long. Removing the second oldest message and retrying..."
         )
-        messages.pop(1)
+        messages.pop(0)
 
     def generate_next_prompt(
         self,
