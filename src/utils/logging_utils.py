@@ -12,7 +12,7 @@ def create_log_file() -> str:
     """
     timeStamp = datetime.now()
     os.makedirs("logs", exist_ok=True)
-    log_path = f"time_{timeStamp}.json"
+    log_path = f"logs/time_{timeStamp}.json"
     return log_path
 
 

@@ -1,5 +1,6 @@
 from enum import Enum, auto
-from playwright.sync_api import Playwright, Locator
+from playwright.sync_api import BrowserContext, Locator, Page
+from src.config import BASE_PAGE_URL
 
 
 class ResponseType(Enum):
@@ -9,7 +10,23 @@ class ResponseType(Enum):
     UNKNOWN = auto()
 
 
-def send_message(page: Playwright, message: str) -> None:
+def preprae_page(context: BrowserContext, login: str, password: str) -> Page:
+    """
+    Prepare the page for interaction.
+    Returns:
+        Page: The Playwright page object.
+    """
+    page = context.new_page()
+    page.goto(BASE_PAGE_URL)
+
+    login_to_mbank(page, login=login, password=password)
+    go_to_chat(page)
+    reset_conversation(page)
+    return page
+
+
+
+def send_message(page: Page, message: str) -> None:
     """
     Send a message in the chat.
     Args:
@@ -21,17 +38,16 @@ def send_message(page: Playwright, message: str) -> None:
     page.locator('[data-test-id="chat\\:textbox-send"]').click()
 
 
-def reset_conversation(page: Playwright) -> Playwright:
+def reset_conversation(page: Page) -> None:
     """
     Reset the conversation in the chat.
     Args:
         page (Playwright): The Playwright page object.
     """
     send_message(page, "[RESET]")
-    return page
 
 
-def login_to_mbank(page: Playwright, login: str, password: str) -> Playwright:
+def login_to_mbank(page: Page, login: str, password: str) -> None:
     """
     Log in to mBank.
     Args:
@@ -54,10 +70,8 @@ def login_to_mbank(page: Playwright, login: str, password: str) -> Playwright:
     page.get_by_role("textbox", name="kod SMS").click()
     page.get_by_role("textbox", name="kod SMS").fill("77777777")
 
-    return page
 
-
-def go_to_chat(page: Playwright) -> Playwright:
+def go_to_chat(page: Page) -> None:
     """
     Go to the chat section of mBank.
     Args:
@@ -69,7 +83,6 @@ def go_to_chat(page: Playwright) -> Playwright:
     page.get_by_role("button", name="Zamknij").click()
     page.locator('[data-test-id="chat\\:chat-icon"]').click()
     page.get_by_role("tab", name="napisz na czacie").click()
-    return page
 
 
 def get_current_response_type(locator: Locator) -> ResponseType:
