@@ -1,15 +1,12 @@
-import re
 from dotenv import load_dotenv
 import os
-from playwright.sync_api import Playwright, sync_playwright, expect
+from playwright.sync_api import Playwright, sync_playwright
 from time import sleep
 from src.prompt_genaration.prompt_generator import PromptGenerator
 from src.config import TOGETHER_API_MODEL
-from src.utils import log_response, extract_conversation_id
-from src.prompt_genaration.system_prompt_generator import SystemPromptGenerator
+from src.utils.logging_utils import log_response
 from datetime import datetime
 from enum import Enum, auto
-import random
 from src.wolf_selector.wolf_selector import WolfSelector
 
 
@@ -20,13 +17,28 @@ class ResponseType(Enum):
     UNKNOWN = auto()
 
 
-def send_message(page: Playwright, message: str):
+def send_message(page: Playwright, message: str) -> None:
+    """
+    Send a message in the chat.
+    Args:
+        page (Playwright): The Playwright page object.
+        message (str): The message to send.
+    """
     page.locator('[data-test-id="chat\\:textbox"]').click()
     page.locator('[data-test-id="chat\\:textbox"]').fill(message)
     page.locator('[data-test-id="chat\\:textbox-send"]').click()
 
 
 def login_to_mbank(page: Playwright, login: str, password: str) -> Playwright:
+    """
+    Log in to mBank.
+    Args:
+        page (Playwright): The Playwright page object.
+        login (str): The login ID.
+        password (str): The password.
+    Returns:
+        page (Playwright): The Playwright page object after logging in.
+    """
     page.get_by_role("textbox", name="Identyfikator").click()
     page.get_by_role("textbox", name="Identyfikator").fill(login)
 
@@ -44,6 +56,13 @@ def login_to_mbank(page: Playwright, login: str, password: str) -> Playwright:
 
 
 def go_to_chat(page: Playwright) -> Playwright:
+    """
+    Go to the chat section of mBank.
+    Args:
+        page (Playwright): The Playwright page object.
+    Returns:
+        page (Playwright): The Playwright page object after navigating to the chat.
+    """
     page.locator('[data-test-id="editbox-confirm-btn"]').click()
     page.get_by_role("button", name="Zamknij").click()
     page.locator('[data-test-id="chat\\:chat-icon"]').click()
@@ -52,8 +71,14 @@ def go_to_chat(page: Playwright) -> Playwright:
 
 
 def get_current_response_type(locator) -> ResponseType:
-    # Ensure the element is visible before trying to evaluate its class
-    # This helps avoid issues with detached elements or stale references
+    """
+    Get the type of response from the chat.
+    Args:
+        locator: The locator for the chat messages.
+    Returns:
+        ResponseType: The type of response (MESSAGE, BUTTONS, RESET, UNKNOWN).
+    """
+    print(f"locator type: {type(locator)}")
     last_element = locator.last
     last_element_class = last_element.evaluate("element => element.className")
 
@@ -72,8 +97,6 @@ def run(
     wolf_selector: WolfSelector,
     bad_prompt_generator: PromptGenerator,
     good_prompt_generator: PromptGenerator,
-    good_system_prompt: str,
-    bad_system_prompt: str,
     login: str,
     password: str,
 ) -> None:
@@ -88,11 +111,8 @@ def run(
     send_message(page, "[RESET]")
     messages = []
 
-    prompt = good_prompt_generator.generate_first_prompt(system_prompt=good_system_prompt)
+    prompt = good_prompt_generator.generate_first_prompt()
 
-    # message = {"role": "system", "content": system_prompt}
-
-    # messages.append(message)
     messages.append(
         {
             "role": "assistant",
@@ -143,13 +163,11 @@ def run(
 
                 choosen_model = wolf_selector.choose_model(messages=messages)
                 if choosen_model == "good":
-                    good_messages = [{'role': 'system', 'content': good_system_prompt}] + messages
                     print(f"Good model selected")
-                    prompt = good_prompt_generator.generate_next_prompt(messages=good_messages)
+                    prompt = good_prompt_generator.generate_next_prompt(messages=messages)
                 elif choosen_model == "bad":
                     print(f"Bad model selected")
-                    bad_messages = [{'role': 'system', 'content': bad_system_prompt}] + messages
-                    prompt = bad_prompt_generator.generate_next_prompt(messages=bad_messages)
+                    prompt = bad_prompt_generator.generate_next_prompt(messages=messages)
                 if (prompt == "Error: Unable to generate summary."):
                     break
                 if "Jesteś zablokowany!!!" in current_message or "Komunikat na potrzeby hackatonu:" in current_message:
@@ -179,13 +197,11 @@ def run(
                 
                 choosen_model = wolf_selector.choose_model(messages=messages)
                 if choosen_model == "good":
-                    good_messages = [{'role': 'system', 'content': good_system_prompt}] + messages
                     print(f"Good model selected")
-                    prompt = good_prompt_generator.generate_next_prompt(messages=good_messages)
+                    prompt = good_prompt_generator.generate_next_prompt(messages=messages)
                 elif choosen_model == "bad":
                     print(f"Bad model selected")
-                    bad_messages = [{'role': 'system', 'content': bad_system_prompt}] + messages
-                    prompt = bad_prompt_generator.generate_next_prompt(messages=bad_messages)
+                    prompt = bad_prompt_generator.generate_next_prompt(messages=messages)
                 if (prompt == "Error: Unable to generate summary."):
                     break
                 
@@ -209,21 +225,8 @@ if __name__ == "__main__":
     login = os.getenv("LOGIN")
     password = os.getenv("PASSWORD")
     with sync_playwright() as playwright:
-        system_prompt_generator = SystemPromptGenerator()
-        bad_system_prompt = system_prompt_generator.get_system_prompt(
-            category="Active Manipulation - PL"
-        )
-        good_system_prompt = system_prompt_generator.get_system_prompt(
-            category="Bot Calming - PL"
-        )
-
-        good_prompt_generator = PromptGenerator(TOGETHER_API_MODEL)
-        good_system_prompt += "Wiadomości mają być do 400 znaków."
-        good_system_prompt += "Jeśli na wejściu dostaniesz wiadomość, polega na wyborze z przycisków, to odpowiedz tylko na podstawie przycisków."
-
-        bad_prompt_generator = PromptGenerator(TOGETHER_API_MODEL)
-        bad_system_prompt += "Wiadomości mają być do 400 znaków."
-        bad_system_prompt += "Jeśli na wejściu dostaniesz wiadomość, polega na wyborze z przycisków, to odpowiedz tylko na podstawie przycisków."
+        good_prompt_generator = PromptGenerator(TOGETHER_API_MODEL, category="Bot Calming - PL")
+        bad_prompt_generator = PromptGenerator(TOGETHER_API_MODEL, category="Active Manipulation - PL")
         
         wolf_selector = WolfSelector(model=TOGETHER_API_MODEL)
         run(
@@ -231,8 +234,6 @@ if __name__ == "__main__":
             wolf_selector=wolf_selector,
             good_prompt_generator=good_prompt_generator,
             bad_prompt_generator=bad_prompt_generator,
-            good_system_prompt=good_system_prompt,
-            bad_system_prompt=bad_system_prompt,
             login=login,
             password=password,
         )
