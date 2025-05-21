@@ -20,9 +20,10 @@ from src.utils.logging_utils import logger
 
 class PromptGenerator:
     def __init__(
-            self, 
-            model: str,
-            category: str = "Misinterpretation - PL",):
+        self,
+        model: str,
+        category: str = "Misinterpretation - PL",
+    ):
         """
         Inicialize the PromptGenerator with the specified model.
 
@@ -33,7 +34,9 @@ class PromptGenerator:
         self.model = model
         self.tools = tools
         self.system_prompt_generator = SystemPromptGenerator()
-        self.system_prompt = self.system_prompt_generator.get_system_prompt(category=category)
+        self.system_prompt = self.system_prompt_generator.get_system_prompt(
+            category=category
+        )
 
     def get_system_prompt(self, category: str) -> str:
         """
@@ -234,7 +237,7 @@ class PromptGenerator:
 
         Returns:
             str: The generated response or tool result.
-        """        
+        """
         self._add_extra_prompt(messages, extra_system_prompt)
 
         while len(messages) > 1:

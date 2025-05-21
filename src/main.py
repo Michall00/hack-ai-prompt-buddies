@@ -18,8 +18,6 @@ from src.utils.logging_utils import logger
 def run(
     playwright: Playwright,
     wolf_selector: WolfSelector,
-    bad_prompt_generator: PromptGenerator,
-    good_prompt_generator: PromptGenerator,
     login: str,
     password: str,
     log_path: str,
@@ -30,7 +28,7 @@ def run(
 
     chat = ChatHistory()
     logger.info("Starting chatbot session")
-    prompt = good_prompt_generator.generate_first_prompt()
+    prompt = wolf_selector.good_prompt_generator.generate_first_prompt()
     chat.append_assistant(prompt)
     send_message(page, prompt)
     logger.info(f"Initial prompt: {prompt}")
@@ -56,8 +54,6 @@ def run(
                     current_message=current_message,
                     chat=chat,
                     wolf_selector=wolf_selector,
-                    good_prompt_generator=good_prompt_generator,
-                    bad_prompt_generator=bad_prompt_generator,
                     log_path=log_path,
                 ):
                     break
@@ -67,8 +63,6 @@ def run(
                     current_message=current_message,
                     chat=chat,
                     wolf_selector=wolf_selector,
-                    good_prompt_generator=good_prompt_generator,
-                    bad_prompt_generator=bad_prompt_generator,
                     log_path=log_path,
                 ):
                     break
@@ -102,8 +96,6 @@ def process_text_response(
     current_message: str,
     chat: ChatHistory,
     wolf_selector: WolfSelector,
-    good_prompt_generator: PromptGenerator,
-    bad_prompt_generator: PromptGenerator,
     log_path: str,
 ) -> bool:
     log_response(current_message, sender="bot", log_path=log_path)
@@ -111,12 +103,7 @@ def process_text_response(
     chat.append_user(response)
     logger.info(f"Bot message: {response}")
 
-    choosen_model = wolf_selector.choose_model(messages=chat.messages)
-    logger.info(f"{'Good' if choosen_model == 'good' else 'Bad'} model selected")
-
-    prompt_generator = good_prompt_generator if choosen_model == "good" else bad_prompt_generator
-    prompt = prompt_generator.generate_next_prompt(messages=chat.messages)
-    logger.info(f"Generated prompt: {prompt}")
+    prompt = wolf_selector.generate_next_prompt(messages=chat.messages)
 
     if prompt == "Error: Unable to generate summary.":
         return False
@@ -135,8 +122,6 @@ def process_button_response(
     page: Page,
     chat: ChatHistory,
     wolf_selector: WolfSelector,
-    good_prompt_generator: PromptGenerator,
-    bad_prompt_generator: PromptGenerator,
     log_path: str,
 ) -> bool:
     chat_buttons = page.locator("chat-button").all()
@@ -153,11 +138,7 @@ def process_button_response(
     response += "\nWybierz tekst z przycisków powyżej"
     chat.append_user(response)
 
-    choosen_model = wolf_selector.choose_model(messages=chat.messages)
-    logger.info(f"{'Good' if choosen_model == 'good' else 'Bad'} model selected")
-
-    prompt_generator = good_prompt_generator if choosen_model == "good" else bad_prompt_generator
-    prompt = prompt_generator.generate_next_prompt(messages=chat.messages)
+    prompt = wolf_selector.generate_next_prompt(messages=chat.messages)
 
     if prompt == "Error: Unable to generate summary.":
         return False
@@ -175,14 +156,12 @@ if __name__ == "__main__":
     with sync_playwright() as playwright:
         good_prompt_generator = PromptGenerator(TOGETHER_API_MODEL, category="Bot Calming - PL")
         bad_prompt_generator = PromptGenerator(TOGETHER_API_MODEL, category="Active Manipulation - PL")
-        wolf_selector = WolfSelector(model=TOGETHER_API_MODEL)
+        wolf_selector = WolfSelector(model=TOGETHER_API_MODEL, good_prompt_generator=good_prompt_generator, bad_prompt_generator=bad_prompt_generator)
 
         log_path = create_log_file()
         run(
             playwright,
             wolf_selector=wolf_selector,
-            good_prompt_generator=good_prompt_generator,
-            bad_prompt_generator=bad_prompt_generator,
             login=login,
             password=password,
             log_path=log_path,
