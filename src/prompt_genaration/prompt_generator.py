@@ -15,6 +15,7 @@ from src.prompt_genaration.tools import (
     summarize_expenses_by_category,
 )
 from src.prompt_genaration.tools_definition import tools
+from src.utils.logging_utils import logger
 
 
 class PromptGenerator:
@@ -79,7 +80,7 @@ class PromptGenerator:
             return response.choices[0].message.content.strip()
 
         except Exception as e:
-            print(f"Error during API call: {e}")
+            logger.error(f"Error during API call: {e}")
             return "Error: Unable to generate summary."
 
     def _add_extra_prompt(
@@ -212,7 +213,9 @@ class PromptGenerator:
         Args:
             messages (list[dict]): A list of message dictionaries for the conversation.
         """
-        print("Context too long. Removing the second oldest message and retrying...")
+        logger.warning(
+            "Context too long. Removing the second oldest message and retrying..."
+        )
         messages.pop(1)
 
     def generate_next_prompt(
@@ -252,7 +255,7 @@ class PromptGenerator:
             except InvalidRequestError as e:
                 self._handle_context_too_long(messages)
             except Exception as e:
-                print(f"Error during API call: {e}")
+                logger.error(f"Error during API call: {e}")
                 return "Error: Unable to generate the next prompt."
 
         return (
