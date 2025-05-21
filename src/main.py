@@ -72,7 +72,8 @@ def run(
     wolf_selector: WolfSelector,
     bad_prompt_generator: PromptGenerator,
     good_prompt_generator: PromptGenerator,
-    system_prompt: str,
+    good_system_prompt: str,
+    bad_system_prompt: str,
     login: str,
     password: str,
 ) -> None:
@@ -87,11 +88,17 @@ def run(
     send_message(page, "[RESET]")
     messages = []
 
-    prompt = good_prompt_generator.generate_first_prompt(system_prompt=system_prompt)
+    prompt = good_prompt_generator.generate_first_prompt(system_prompt=good_system_prompt)
 
-    message = {"role": "system", "content": system_prompt}
+    # message = {"role": "system", "content": system_prompt}
 
-    messages.append(message)
+    # messages.append(message)
+    messages.append(
+        {
+            "role": "assistant",
+            "content": prompt
+        }
+    )
 
     send_message(page, prompt)
 
@@ -136,11 +143,13 @@ def run(
 
                 choosen_model = wolf_selector.choose_model(messages=messages)
                 if choosen_model == "good":
+                    good_messages = [{'role': 'system', 'content': good_system_prompt}] + messages
                     print(f"Good model selected")
-                    prompt = good_prompt_generator.generate_next_prompt(messages=messages)
+                    prompt = good_prompt_generator.generate_next_prompt(messages=good_messages)
                 elif choosen_model == "bad":
                     print(f"Bad model selected")
-                    prompt = bad_prompt_generator.generate_next_prompt(messages=messages)
+                    bad_messages = [{'role': 'system', 'content': bad_system_prompt}] + messages
+                    prompt = bad_prompt_generator.generate_next_prompt(messages=bad_messages)
                 if (prompt == "Error: Unable to generate summary."):
                     break
                 if "Jesteś zablokowany!!!" in current_message or "Komunikat na potrzeby hackatonu:" in current_message:
@@ -170,11 +179,13 @@ def run(
                 
                 choosen_model = wolf_selector.choose_model(messages=messages)
                 if choosen_model == "good":
+                    good_messages = [{'role': 'system', 'content': good_system_prompt}] + messages
                     print(f"Good model selected")
-                    prompt = good_prompt_generator.generate_next_prompt(messages=messages)
+                    prompt = good_prompt_generator.generate_next_prompt(messages=good_messages)
                 elif choosen_model == "bad":
                     print(f"Bad model selected")
-                    prompt = bad_prompt_generator.generate_next_prompt(messages=messages)
+                    bad_messages = [{'role': 'system', 'content': bad_system_prompt}] + messages
+                    prompt = bad_prompt_generator.generate_next_prompt(messages=bad_messages)
                 if (prompt == "Error: Unable to generate summary."):
                     break
                 
@@ -200,7 +211,7 @@ if __name__ == "__main__":
     with sync_playwright() as playwright:
         system_prompt_generator = SystemPromptGenerator()
         bad_system_prompt = system_prompt_generator.get_system_prompt(
-            category="Intent Misclassification - PL"
+            category="Active Manipulation - PL"
         )
         good_system_prompt = system_prompt_generator.get_system_prompt(
             category="Bot Calming - PL"
@@ -220,7 +231,8 @@ if __name__ == "__main__":
             wolf_selector=wolf_selector,
             good_prompt_generator=good_prompt_generator,
             bad_prompt_generator=bad_prompt_generator,
-            system_prompt=good_system_prompt,
+            good_system_prompt=good_system_prompt,
+            bad_system_prompt=bad_system_prompt,
             login=login,
             password=password,
         )
