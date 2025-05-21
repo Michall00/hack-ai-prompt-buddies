@@ -1,0 +1,114 @@
+mBank S.A. Bankowość Detaliczna,,,,,,,
+,,Skrytka Pocztowa 2108,,,,,
+,,90-959 Łódź 2,,,,,
+,,www.mBank.pl,,,,,
+,,mLinia: 801 300 800,,,,,
+,,+48 (42) 6 300 800,,,,,
+,,,,,,,
+,,,,,,,
+#Klient,,,,,,,
+HACATON NAZWISKO_161 PRIVATE,,,,,,,
+,,,,,,,
+Lista operacji,,,,,,,
+,,,,,,,
+#Za okres:,,,,,,,
+20.05.2024,20.05.2025,,,,,,
+,,,,,,,
+#zgodnie z wybranymi filtrami wyszukiwania,,,,,,,
+      #dla rachunków:,,,,,,,
+      DODATKOWE - 52114020040000310276049738,,,,,,,
+      GŁÓWNE KONTO - 11114020040000320276048196,,,,,,,
+      eKonto - 42114020040000330276052439,,,,,,,
+      eKonto - 42114020040000310276052440,,,,,,,
+      ,,,,,,,
+      #Lista nie jest dokumentem w rozumieniu art. 7 Ustawy Prawo Bankowe (Dz. U. Nr 140 z 1997 roku, poz.939 z późniejszymi zmianami), ponieważ operacje można samodzielnie edytować.,,,,,
+      ,,,,,,,
+      #Waluta,#Wpływy,#Wydatki,,,,,
+PLN,1 327 958,76,-350 474,81,,,
+      ,,,,,,,
+#Data operacji,#Opis operacji,#Rachunek,#Kategoria,#Kwota,#KWOTAGROSZE, #Saldo po operacji,#Saldo po operacji forsze
+2025-05-18,PRZELEW NA TWOJE CELE  HACATON NAZWISKO_161 PRIVATE                                          AL.TESTOWA 5                       00-850 WARSZAWA                     PRZELEW NA TWOJE CELE                                                               ,GŁÓWNE KONTO 1111 ... 8196,Lokaty i konto oszcz.,-123,00 PLN,88 712,14 PLN
+2025-05-13,PODATEK OD ODSETEK KAPITAŁOWYCH                ,GŁÓWNE KONTO 1111 ... 8196,Podatki,-2,70 PLN,88 835,14 PLN
+2025-05-13,ODSETKI LOKAT TERMINOWYCH                ,GŁÓWNE KONTO 1111 ... 8196,Odsetki,14,19 PLN,88 837,84 PLN
+2025-05-09,"BASEN ŻABIE OCZKO, KARNET                                                                         PRZELEW ZEWNĘTRZNY WYCHODZĄCY                                                       ",GŁÓWNE KONTO 1111 ... 8196,Bez kategorii,-250,00 PLN,88 823,65 PLN
+2025-05-06,PRZELEW NA TWOJE CELE  HACATON NAZWISKO_161 PRIVATE                                          AL.TESTOWA 5                       00-850 WARSZAWA                     PRZELEW NA TWOJE CELE                                                               ,GŁÓWNE KONTO 1111 ... 8196,Lokaty i konto oszcz.,-213,00 PLN,89 073,65 PLN
+2025-05-02,OPŁATA ZA WYCIĄG SŁANY E-MAIL                ,eKonto 4211 ... 2439,Opłaty i odsetki,-10,00 PLN,882 362,48 PLN
+2025-05-02,PODATEK OD ODSETEK KAPITAŁOWYCH                ,GŁÓWNE KONTO 1111 ... 8196,Podatki,-2,70 PLN,89 286,65 PLN
+2025-05-02,ODSETKI LOKAT TERMINOWYCH                ,GŁÓWNE KONTO 1111 ... 8196,Odsetki,14,19 PLN,89 289,35 PLN
+2025-05-01,OPŁATA ZA PROWADZENIE RACHUNKU                ,GŁÓWNE KONTO 1111 ... 8196,Bez kategorii,-200,00 PLN,89 275,16 PLN
+2025-05-01,OPŁATA ZA PROWADZENIE RACHUNKU                ,DODATKOWE 5211 ... 9738,Bez kategorii,-10,00 PLN,6 409,33 PLN
+2025-05-01,OPŁATA ZA PROWADZENIE RACHUNKU                ,eKonto 4211 ... 2439,Bez kategorii,-146,67 PLN,882 372,48 PLN
+2025-05-01,PODATEK OD ODSETEK KAPITAŁOWYCH                ,eKonto 4211 ... 2439,Podatki,-22 614,49 PLN,882 519,15 PLN
+2025-05-01,KAPITALIZACJA ODSETEK                ,eKonto 4211 ... 2439,Odsetki,119 023,61 PLN,905 133,64 PLN
+2025-05-01,PODATEK OD ODSETEK KAPITAŁOWYCH                ,GŁÓWNE KONTO 1111 ... 8196,Podatki,-624,07 PLN,89 475,16 PLN
+2025-05-01,KAPITALIZACJA ODSETEK                ,GŁÓWNE KONTO 1111 ... 8196,Odsetki,3 284,58 PLN,90 099,23 PLN
+2025-04-30,OPŁATA-PRZELEW WEWN. DOWOLNY                ,GŁÓWNE KONTO 1111 ... 8196,Bez kategorii,-6,00 PLN,86 814,65 PLN
+2025-04-30,"PRACOWNIA CERAMICZNA MINERWA, GLINA                                                                         PRZELEW WEWNĘTRZNY WYCHODZĄCY                                                       ",GŁÓWNE KONTO 1111 ... 8196,Bez kategorii,-80,00 PLN,86 820,65 PLN
+2025-04-24,PODATEK OD ODSETEK KAPITAŁOWYCH                ,GŁÓWNE KONTO 1111 ... 8196,Podatki,-10,29 PLN,86 900,65 PLN
+2025-04-24,ODSETKI LOKAT TERMINOWYCH                ,GŁÓWNE KONTO 1111 ... 8196,Odsetki,54,14 PLN,86 910,94 PLN
+2025-04-24,WYGAŚNIĘCIE LOKATY TERMINOWEJ                ,GŁÓWNE KONTO 1111 ... 8196,Lokaty i konto oszcz.,9 300,00 PLN,86 856,80 PLN
+2025-04-22,KREDYT - SPŁATA RATY                ,eKonto 4211 ... 2439,Spłaty rat,-3 006,00 PLN,786 110,03 PLN
+2025-04-22,KREDYT - SPŁATA RATY                ,eKonto 4211 ... 2439,Spłaty rat,-30 324,93 PLN,789 116,03 PLN
+2025-04-22,OPŁATA-PRZELEW WEWN. DOWOLNY                ,GŁÓWNE KONTO 1111 ... 8196,Bez kategorii,-6,00 PLN,77 556,80 PLN
+2025-04-22,"PRACOWNIA CERAMICZNA MINERWA, GLINA                                                                         PRZELEW WEWNĘTRZNY WYCHODZĄCY                                                       ",GŁÓWNE KONTO 1111 ... 8196,Bez kategorii,-80,00 PLN,77 562,80 PLN
+2025-04-21,PODATEK OD ODSETEK KAPITAŁOWYCH                ,GŁÓWNE KONTO 1111 ... 8196,Podatki,-2,70 PLN,77 642,80 PLN
+2025-04-21,ODSETKI LOKAT TERMINOWYCH                ,GŁÓWNE KONTO 1111 ... 8196,Odsetki,14,19 PLN,77 645,50 PLN
+2025-04-18,PRZELEW NA TWOJE CELE  HACATON NAZWISKO_161 PRIVATE                                          AL.TESTOWA 5                       00-850 WARSZAWA                     PRZELEW NA TWOJE CELE                                                               ,GŁÓWNE KONTO 1111 ... 8196,Lokaty i konto oszcz.,-123,00 PLN,77 631,31 PLN
+2025-04-16,OPŁATA-PRZELEW WEWN. DOWOLNY                ,GŁÓWNE KONTO 1111 ... 8196,Bez kategorii,-6,00 PLN,77 754,31 PLN
+2025-04-16,"PRACOWNIA CERAMICZNA MINERWA, GLINA                                                                         PRZELEW WEWNĘTRZNY WYCHODZĄCY                                                       ",GŁÓWNE KONTO 1111 ... 8196,Bez kategorii,-80,00 PLN,77 760,31 PLN
+2025-04-15,KREDYT - SPŁATA RATY                ,eKonto 4211 ... 2439,Spłaty rat,-30 252,10 PLN,819 440,96 PLN
+2025-04-14,KREDYT - SPŁATA RATY                ,eKonto 4211 ... 2439,Spłaty rat,-2 997,87 PLN,849 693,06 PLN
+2025-04-14,KREDYT - SPŁATA RATY                ,eKonto 4211 ... 2439,Spłaty rat,-30 252,10 PLN,852 690,93 PLN
+2025-04-11,KREDYT - SPŁATA RATY                ,eKonto 4211 ... 2439,Spłaty rat,-2 997,87 PLN,882 943,03 PLN
+2025-04-11,KREDYT - SPŁATA RATY                ,eKonto 4211 ... 2439,Spłaty rat,-30 252,10 PLN,885 940,90 PLN
+2025-04-11,PRZELEW NA TWOJE CELE  HACATON NAZWISKO_161 PRIVATE                                          AL.TESTOWA 5                       00-850 WARSZAWA                     PRZELEW NA TWOJE CELE                                                               ,GŁÓWNE KONTO 1111 ... 8196,Regularne oszczędzanie,-30,00 PLN,77 840,31 PLN
+2025-04-11,"BASEN ŻABIE OCZKO, KARNET                                                                         PRZELEW ZEWNĘTRZNY WYCHODZĄCY                                                       ",GŁÓWNE KONTO 1111 ... 8196,Bez kategorii,-250,00 PLN,77 870,31 PLN
+2025-04-11,OPŁATA-PRZELEW WEWN. DOWOLNY                ,GŁÓWNE KONTO 1111 ... 8196,Bez kategorii,-6,00 PLN,78 120,31 PLN
+2025-04-11,"PRACOWNIA CERAMICZNA MINERWA, GLINA                                                                         PRZELEW WEWNĘTRZNY WYCHODZĄCY                                                       ",GŁÓWNE KONTO 1111 ... 8196,Bez kategorii,-80,00 PLN,78 126,31 PLN
+2025-04-11,PRZELEW NA TWOJE CELE  HACATON NAZWISKO_161 PRIVATE                                          AL.TESTOWA 5                       00-850 WARSZAWA                     PRZELEW NA TWOJE CELE                                                               ,GŁÓWNE KONTO 1111 ... 8196,Regularne oszczędzanie,-17,50 PLN,78 206,31 PLN
+2025-04-11,"URZĄD SKARBOWY, PIT-37                                     CENTRUM ROZLICZENIOWE               PRZELEW PODATKOWY                                                                   ",GŁÓWNE KONTO 1111 ... 8196,Podatki,-125,00 PLN,78 223,81 PLN
+2025-04-11,PROWIZJA ZA PRZELEW SEPA WYCH.                ,GŁÓWNE KONTO 1111 ... 8196,Opłaty i odsetki,-5,00 PLN,78 348,81 PLN
+2025-04-11,"HOTEL BERTRAM, PRZELEW SRODKOW                                                                         PRZELEW SEPA WYCHODZĄCY                                                             ",GŁÓWNE KONTO 1111 ... 8196,Podróże i wyjazdy,-2 212,35 PLN,78 353,81 PLN
+2025-04-11,PRZELEW NA TWOJE CELE  HACATON NAZWISKO_161 PRIVATE                                          AL.TESTOWA 5                       00-850 WARSZAWA                     PRZELEW NA TWOJE CELE                                                               ,GŁÓWNE KONTO 1111 ... 8196,Regularne oszczędzanie,-7,00 PLN,80 566,16 PLN
+2025-04-11,"KORNEL RACUSZEK, SKŁADKA URODZINOWA                                                                         PRZELEW ZEWNĘTRZNY WYCHODZĄCY                                                       ",GŁÓWNE KONTO 1111 ... 8196,Prezenty i wsparcie,-20,00 PLN,80 573,16 PLN
+2025-04-11,PRZELEW NA TWOJE CELE  HACATON NAZWISKO_161 PRIVATE                                          AL.TESTOWA 5                       00-850 WARSZAWA                     PRZELEW NA TWOJE CELE                                                               ,GŁÓWNE KONTO 1111 ... 8196,Regularne oszczędzanie,-11,00 PLN,80 593,16 PLN
+2025-04-11,"MATYLDA PUSTUŁKA, PRZELEW ŚRODKÓW                                                                         PRZELEW WEWNĘTRZNY WYCHODZĄCY                                                       ",GŁÓWNE KONTO 1111 ... 8196,Bez kategorii,-60,00 PLN,80 604,16 PLN
+2025-04-10,KREDYT - SPŁATA RATY                ,eKonto 4211 ... 2439,Spłaty rat,-2 997,87 PLN,916 193,00 PLN
+2025-04-10,KREDYT - SPŁATA RATY                ,eKonto 4211 ... 2439,Spłaty rat,-30 252,10 PLN,919 190,87 PLN
+2025-04-10,PODATEK OD ODSETEK KAPITAŁOWYCH                ,GŁÓWNE KONTO 1111 ... 8196,Podatki,-11,46 PLN,80 664,16 PLN
+2025-04-10,ODSETKI LOKAT TERMINOWYCH                ,GŁÓWNE KONTO 1111 ... 8196,Odsetki,60,30 PLN,80 675,62 PLN
+2025-04-09,KREDYT - SPŁATA RATY                ,eKonto 4211 ... 2439,Spłaty rat,-3 049,63 PLN,949 442,97 PLN
+2025-04-09,KREDYT - SPŁATA RATY                ,eKonto 4211 ... 2439,Spłaty rat,-31 007,40 PLN,952 492,60 PLN
+2025-04-09,WPŁATA  HACATON NAZWISKO_161 PRIVATE       AL.TESTOWA 5                       00-850 WARSZAWA                                                        WPŁATA                                                                              ,eKonto 4211 ... 2439,Wpływy - inne,600 000,00 PLN,600 000,00 PLN
+2025-04-08,PODATEK OD ODSETEK KAPITAŁOWYCH                ,GŁÓWNE KONTO 1111 ... 8196,Podatki,-1,22 PLN,80 615,32 PLN
+2025-04-08,ODSETKI LOKAT TERMINOWYCH                ,GŁÓWNE KONTO 1111 ... 8196,Odsetki,6,41 PLN,80 616,54 PLN
+2025-04-08,WYGAŚNIĘCIE LOKATY TERMINOWEJ                ,GŁÓWNE KONTO 1111 ... 8196,Lokaty i konto oszcz.,4 000,00 PLN,80 610,13 PLN
+2025-04-07,OPŁATA ZA WYDANIE KARTY                ,GŁÓWNE KONTO 1111 ... 8196,Opłaty i odsetki,-25,00 PLN,76 610,13 PLN
+2025-04-05,PRZELEW NA TWOJE CELE  HACATON NAZWISKO_161 PRIVATE                                          AL.TESTOWA 5                       00-850 WARSZAWA                     PRZELEW NA TWOJE CELE                                                               ,GŁÓWNE KONTO 1111 ... 8196,Lokaty i konto oszcz.,-213,00 PLN,76 635,13 PLN
+2025-04-01,OPŁATA ZA PROWADZENIE RACHUNKU                ,DODATKOWE 5211 ... 9738,Bez kategorii,0,67 PLN,6 419,33 PLN
+2025-04-01,OPŁATA ZA PROWADZENIE RACHUNKU                ,GŁÓWNE KONTO 1111 ... 8196,Bez kategorii,-33,33 PLN,76 848,13 PLN
+2025-04-01,PODATEK OD ODSETEK KAPITAŁOWYCH                ,GŁÓWNE KONTO 1111 ... 8196,Podatki,-92,94 PLN,76 881,46 PLN
+2025-04-01,KAPITALIZACJA ODSETEK                ,GŁÓWNE KONTO 1111 ... 8196,Odsetki,489,15 PLN,76 974,40 PLN
+2025-03-31,PROWIZJA ZA PRZELEW WALUTOWY WEWN.                ,GŁÓWNE KONTO 1111 ... 8196,Opłaty i odsetki,-2,00 PLN,76 485,25 PLN
+2025-03-31,"HACATON NAZWISKO_161, NA WAKACJE                                                                         PRZELEW WEWNĘTRZNY WYCHODZĄCY                                                       ",GŁÓWNE KONTO 1111 ... 8196,Lokaty i konto oszcz.,-36 277,21 PLN,76 487,25 PLN
+2025-03-30,WPŁATA  HACATON NAZWISKO_161 PRIVATE       AL.TESTOWA 5                       00-850 WARSZAWA                                                        WPŁATA                                                                              ,GŁÓWNE KONTO 1111 ... 8196,Wpływy - inne,95 154,00 PLN,112 764,46 PLN
+2025-03-30,OPŁATA-PRZELEW WEWN. ZDEFINIOWANY                ,GŁÓWNE KONTO 1111 ... 8196,Opłaty i odsetki,-2,00 PLN,17 610,46 PLN
+2025-03-30,"HACATON NAZWISKO_161, NA OSZCZĘDNOŚCI                                                                         PRZELEW WEWNĘTRZNY WYCHODZĄCY                                                       ",GŁÓWNE KONTO 1111 ... 8196,Lokaty i konto oszcz.,-12 500,00 PLN,17 612,46 PLN
+2025-03-30,"HACATON NAZWISKO_161 PRIVATE, PRZELEW ŚRODKÓW  AL.TESTOWA 5                       00-850 WARSZAWA                     PRZELEW WEWNĘTRZNY PRZYCHODZĄCY                                                     ",DODATKOWE 5211 ... 9738,Przelew własny,6 420,00 PLN,6 420,00 PLN
+2025-03-30,OPŁATA-PRZELEW WEWN. ZDEFINIOWANY                ,GŁÓWNE KONTO 1111 ... 8196,Opłaty i odsetki,-2,00 PLN,30 112,46 PLN
+2025-03-30,"HACATON NAZWISKO_161, PRZELEW ŚRODKÓW                                                                         PRZELEW WEWNĘTRZNY WYCHODZĄCY                                                       ",GŁÓWNE KONTO 1111 ... 8196,Przelew własny,-6 420,00 PLN,30 114,46 PLN
+2025-03-30,"HACATON NAZWISKO_161 PRIVATE, OTW. LOKATY NR 079727035600004  AL.TESTOWA 5                       00-850 WARSZAWA                     PRZELEW WEWNĘTRZNY WYCHODZĄCY                                                       ",GŁÓWNE KONTO 1111 ... 8196,Lokaty i konto oszcz.,-9 300,00 PLN,36 534,46 PLN
+2025-03-30,"HACATON NAZWISKO_161 PRIVATE, OTW. LOKATY NR 079727035600003  AL.TESTOWA 5                       00-850 WARSZAWA                     PRZELEW WEWNĘTRZNY WYCHODZĄCY                                                       ",GŁÓWNE KONTO 1111 ... 8196,Lokaty i konto oszcz.,-23 541,00 PLN,45 834,46 PLN
+2025-03-30,"HACATON NAZWISKO_161 PRIVATE, OTW. LOKATY NR 079727035600002  AL.TESTOWA 5                       00-850 WARSZAWA                     PRZELEW WEWNĘTRZNY WYCHODZĄCY                                                       ",GŁÓWNE KONTO 1111 ... 8196,Lokaty i konto oszcz.,-4 000,00 PLN,69 375,46 PLN
+2025-03-30,"HACATON NAZWISKO_161 PRIVATE, OTW. LOKATY NR 079727035600001  AL.TESTOWA 5                       00-850 WARSZAWA                     PRZELEW WEWNĘTRZNY WYCHODZĄCY                                                       ",GŁÓWNE KONTO 1111 ... 8196,Lokaty i konto oszcz.,-17 243,65 PLN,73 375,46 PLN
+2025-03-30,WPŁATA  HACATON NAZWISKO_161 PRIVATE       AL.TESTOWA 5                       00-850 WARSZAWA                                                        WPŁATA                                                                              ,GŁÓWNE KONTO 1111 ... 8196,Wpływy - inne,35 124,00 PLN,90 619,11 PLN
+2025-03-28,PRZELEW NA TWOJE CELE  HACATON NAZWISKO_161 PRIVATE                                          AL.TESTOWA 5                       00-850 WARSZAWA                     PRZELEW NA TWOJE CELE                                                               ,GŁÓWNE KONTO 1111 ... 8196,Regularne oszczędzanie,-52,30 PLN,55 495,11 PLN
+2025-03-28,"ANNA NOWAK, PRZELEW ŚRODKÓW NA ZEWNĄTRZ  KWIATOWA 5                         ŁÓDŹ                                PRZELEW ZEWNĘTRZNY WYCHODZĄCY                                                       ",GŁÓWNE KONTO 1111 ... 8196,Bez kategorii,-453,00 PLN,55 547,41 PLN
+2025-03-28,PRZELEW NA TWOJE CELE                ,GŁÓWNE KONTO 1111 ... 8196,Regularne oszczędzanie,-79,24 PLN,56 000,41 PLN
+2025-03-28,ZAKUP PRZY UŻYCIU KARTY W KRAJU                ,GŁÓWNE KONTO 1111 ... 8196,Bez kategorii,-756,40 PLN,56 079,65 PLN
+2025-03-27,WPŁATA NA CEL  HACATON NAZWISKO_161 PRIVATE                                          AL.TESTOWA 5                       00-850 WARSZAWA                     WPŁATA NA CEL                                                                       ,GŁÓWNE KONTO 1111 ... 8196,Lokaty i konto oszcz.,-8 632,95 PLN,56 836,05 PLN
+2025-03-27,WPŁATA NA CEL  HACATON NAZWISKO_161 PRIVATE                                          AL.TESTOWA 5                       00-850 WARSZAWA                     WPŁATA NA CEL                                                                       ,GŁÓWNE KONTO 1111 ... 8196,Lokaty i konto oszcz.,-4 531,00 PLN,65 469,00 PLN
+2025-03-27,WPŁATA  HACATON NAZWISKO_161 PRIVATE       AL.TESTOWA 5                       00-850 WARSZAWA                                                        WPŁATA                                                                              ,GŁÓWNE KONTO 1111 ... 8196,Wpływy - inne,70 000,00 PLN,70 000,00 PLN
+2024-11-09,KREDYT - UZNANIE                ,eKonto 4211 ... 2439,Wypłata kredytu,35 000,00 PLN,635 000,00 PLN
+2024-10-09,LIMIT MBANK PŁACĘ PÓŹNIEJ - PROW.                ,eKonto 4211 ... 2439,Bez kategorii,-1 500,00 PLN,983 500,00 PLN
+2024-10-09,KREDYT - UZNANIE                ,eKonto 4211 ... 2439,Wypłata kredytu,350 000,00 PLN,985 000,00 PLN
