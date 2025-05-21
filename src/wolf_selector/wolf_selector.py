@@ -1,7 +1,6 @@
 from together import Together
 from typing import Literal
-from together.error import InvalidRequestError
-
+from src.utils.logging_utils import logger
 
 class WolfSelector:
     def __init__(self, model: str):
@@ -69,13 +68,12 @@ class WolfSelector:
                 )
 
                 decision = response.choices[0].message.content.strip().lower()
-                print(f"Decision: {decision}")
                 if decision not in {"dobry", "zły"}:
-                    print(f"Unexpected response from selector: {decision}")
+                    logger.warning(f"Unexpected response from selector: {decision}")
                     return "good"  
                 return "good" if decision == "dobry" else "bad"
             except Exception as e:
-                print(f"Error during API call: {e}")
+                logger.error(f"WolfSelector API error: {e}")
                 return "good"
             
         return "bad"

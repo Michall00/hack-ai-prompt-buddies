@@ -1,6 +1,7 @@
 from enum import Enum, auto
 from playwright.sync_api import BrowserContext, Locator, Page
 from src.config import BASE_PAGE_URL
+from src.utils.logging_utils import logger
 
 
 class ResponseType(Enum):
@@ -22,6 +23,7 @@ def preprae_page(context: BrowserContext, login: str, password: str) -> Page:
     login_to_mbank(page, login=login, password=password)
     go_to_chat(page)
     reset_conversation(page)
+    logger.info("Page prepared for interaction")
     return page
 
 
@@ -36,6 +38,7 @@ def send_message(page: Page, message: str) -> None:
     page.locator('[data-test-id="chat\\:textbox"]').click()
     page.locator('[data-test-id="chat\\:textbox"]').fill(message)
     page.locator('[data-test-id="chat\\:textbox-send"]').click()
+    logger.info(f"Message sent")
 
 
 def reset_conversation(page: Page) -> None:
@@ -45,6 +48,8 @@ def reset_conversation(page: Page) -> None:
         page (Playwright): The Playwright page object.
     """
     send_message(page, "[RESET]")
+    logger.info("Conversation reset")
+    
 
 
 def login_to_mbank(page: Page, login: str, password: str) -> None:
@@ -69,6 +74,7 @@ def login_to_mbank(page: Page, login: str, password: str) -> None:
     page.get_by_role("textbox", name="Kod SMS").wait_for(state="visible", timeout=60000)
     page.get_by_role("textbox", name="kod SMS").click()
     page.get_by_role("textbox", name="kod SMS").fill("77777777")
+    logger.info("Logged in to mBank")
 
 
 def go_to_chat(page: Page) -> None:
@@ -83,6 +89,7 @@ def go_to_chat(page: Page) -> None:
     page.get_by_role("button", name="Zamknij").click()
     page.locator('[data-test-id="chat\\:chat-icon"]').click()
     page.get_by_role("tab", name="napisz na czacie").click()
+    logger.info("Navigated to chat section")
 
 
 def get_current_response_type(locator: Locator) -> ResponseType:

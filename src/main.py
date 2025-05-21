@@ -11,6 +11,8 @@ from src.utils.ui_utils import ResponseType
 from src.chat_history import ChatHistory
 from src.utils.logging_utils import log_response, create_log_file
 from src.utils.ui_utils import send_message, get_current_response_type, preprae_page
+from src.utils.logging_utils import logger
+
 
 def run(
     playwright: Playwright,
@@ -26,9 +28,11 @@ def run(
     page = preprae_page(context, login=login, password=password)
 
     chat = ChatHistory()
+    logger.info("Starting chatbot session")
     prompt = good_prompt_generator.generate_first_prompt()
     chat.append_assistant(prompt)
     send_message(page, prompt)
+    logger.info(f"Initial prompt: {prompt}")
     sleep(1)
 
     messages_container_locator = page.locator(
@@ -68,13 +72,14 @@ def run(
                 ):
                     break
             else:
-                print("Waiting for response...")
+                logger.info("Waiting for response...")
 
             last_message = current_message
         except KeyboardInterrupt:
-            print("Exiting...")
+            logger.info("Exiting...")
             break
 
+    logger.info("Shutting down browser and context")
     context.close()
     browser.close()
 
@@ -84,6 +89,7 @@ def wait_for_new_message(page: Page, last_message: str) -> str:
     while current_message == last_message:
         sleep(1)
         current_message = page.locator("#root div >> p.textContent").last.inner_text()
+        logger.debug("Waiting for new message from chatbot...")
     return current_message
 
 
@@ -99,18 +105,29 @@ def process_text_response(
     log_response(current_message, sender="bot", log_path=log_path)
     response = current_message.split("==========")[0].strip()
     chat.append_user(response)
+    logger.info(f"Bot message: {response}")
 
     choosen_model = wolf_selector.choose_model(messages=chat.messages)
-    print(f"{'Good' if choosen_model == 'good' else 'Bad'} model selected")
+    logger.info(f"{'Good' if choosen_model == 'good' else 'Bad'} model selected")
 
     prompt_generator = good_prompt_generator if choosen_model == "good" else bad_prompt_generator
     prompt = prompt_generator.generate_next_prompt(messages=chat.messages)
+    logger.info(f"Generated prompt: {prompt}")
 
     if prompt == "Error: Unable to generate summary.":
         return False
 
     if any(warning in current_message for warning in ["Jesteś zablokowany!!!", "Komunikat na potrzeby hackatonu:"]):
+        logger.warning("Bot triggered reset condition")
         prompt = "[RESET]"
+        send_message(page, prompt)
+        log_path = create_log_file()
+        chat = ChatHistory()
+        logger.info("Chat history reset. Started new conversation.")
+        prompt = good_prompt_generator.generate_first_prompt()
+        chat.append_assistant(prompt)
+        send_message(page, prompt)
+        return True
 
     log_response(prompt, sender="user", log_path=log_path)
     send_message(page, prompt)
@@ -141,7 +158,7 @@ def process_button_response(
     chat.append_user(response)
 
     choosen_model = wolf_selector.choose_model(messages=chat.messages)
-    print(f"{'Good' if choosen_model == 'good' else 'Bad'} model selected")
+    logger.info(f"{'Good' if choosen_model == 'good' else 'Bad'} model selected")
 
     prompt_generator = good_prompt_generator if choosen_model == "good" else bad_prompt_generator
     prompt = prompt_generator.generate_next_prompt(messages=chat.messages)
