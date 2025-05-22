@@ -18,6 +18,7 @@ dependencies = [
     "playwright>=1.52.0",
     "requests>=2.32.3",
     "setuptools>=80.7.1",
+    "streamlit>=1.45.1",
     "together>=1.5.8",
 ]
 
