@@ -52,6 +52,7 @@ def run(
     prompt = wolf_selector.good_prompt_generator.generate_first_prompt()
     chat.append_assistant(prompt)
     send_message(page, prompt)
+    log_response(prompt, sender="user", log_path=log_path)
     logger.info(f"Initial prompt: {prompt}")
     sleep(1)
 
