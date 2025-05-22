@@ -14,6 +14,8 @@ from src.utils.logging_utils import log_response, create_log_file
 from src.utils.ui_utils import send_message, get_current_response_type, preprae_page
 from src.utils.logging_utils import logger
 
+import random
+
 
 def run(
     playwright: Playwright,
@@ -25,22 +27,22 @@ def run(
     """
     Runs the chatbot interaction session using Playwright.
 
-    This function initializes a browser session, logs into the mBank system, 
-    and manages the interaction with the chatbot. It continuously listens for 
-    chatbot responses, processes them, and sends appropriate replies based on 
-    the response type (text or buttons). The session runs in a loop until 
+    This function initializes a browser session, logs into the mBank system,
+    and manages the interaction with the chatbot. It continuously listens for
+    chatbot responses, processes them, and sends appropriate replies based on
+    the response type (text or buttons). The session runs in a loop until
     interrupted or an error occurs.
 
     Args:
         playwright (Playwright): The Playwright instance used to control the browser.
-        wolf_selector (WolfSelector): An object responsible for generating prompts 
+        wolf_selector (WolfSelector): An object responsible for generating prompts
                                       and handling chatbot interactions.
         login (str): The login credential for accessing the mBank system.
         password (str): The password credential for accessing the mBank system.
         log_path (str): The path to the log file where interaction details are saved.
 
     Returns:
-        None: This function does not return any value. It runs until interrupted 
+        None: This function does not return any value. It runs until interrupted
               or an error occurs, at which point it shuts down the browser session.
     """
     browser = playwright.chromium.launch(headless=False)
@@ -67,8 +69,11 @@ def run(
             messages_container_locator = page.locator(
                 "#root div >> mbank-chat-messages-container >> #scrollable-container div"
             )
-            current_response_type = get_current_response_type(messages_container_locator)
             current_message = wait_for_new_message(page, last_message)
+            current_response_type = get_current_response_type(
+                messages_container_locator
+            )
+            logger.info(f"Current response type: {current_response_type}")
 
             if current_response_type in [ResponseType.MESSAGE, ResponseType.RESET]:
                 if not process_text_response(
@@ -80,14 +85,24 @@ def run(
                 ):
                     break
             elif current_response_type == ResponseType.BUTTONS:
-                if not process_button_response(
-                    page=page,
-                    current_message=current_message,
-                    chat=chat,
-                    wolf_selector=wolf_selector,
-                    log_path=log_path,
-                ):
-                    break
+                buttons = messages_container_locator.locator("chat-button").all()
+                confirm_button_id = next(
+                    (
+                        button.id
+                        for button in buttons
+                        if button.inner_text() == "Potwierdź"
+                    ),
+                    None,
+                )
+                if confirm_button_id:
+                    chosen_button = buttons[confirm_button_id]
+                else:
+                    chosen_button = random.choice(buttons)
+                chosen_button.click()
+                prompt = chosen_button.inner_text()
+                log_response(prompt, sender="user", log_path=log_path)
+                chat.append_assistant(prompt)
+
             else:
                 logger.info("Waiting for response...")
 
@@ -108,8 +123,8 @@ def wait_for_new_message(page: Page, last_message: str) -> str:
     """
     Waits for a new message from the chatbot.
 
-    This function continuously checks for a new message from the chatbot by comparing 
-    the current message with the last received message. It pauses for 1 second between 
+    This function continuously checks for a new message from the chatbot by comparing
+    the current message with the last received message. It pauses for 1 second between
     checks to avoid excessive polling. Once a new message is detected, it is returned.
 
     Args:
@@ -124,6 +139,7 @@ def wait_for_new_message(page: Page, last_message: str) -> str:
         sleep(1)
         current_message = page.locator("#root div >> p.textContent").last.inner_text()
         logger.debug("Waiting for new message from chatbot...")
+    sleep(1)
     return current_message
 
 
@@ -137,9 +153,9 @@ def process_text_response(
     """
     Processes a text response from the chatbot and generates the next prompt.
 
-    This function logs the chatbot's response, updates the chat history, and generates 
-    the next prompt using the `wolf_selector`. It also handles specific reset conditions 
-    based on the content of the chatbot's message. If a critical error occurs during 
+    This function logs the chatbot's response, updates the chat history, and generates
+    the next prompt using the `wolf_selector`. It also handles specific reset conditions
+    based on the content of the chatbot's message. If a critical error occurs during
     prompt generation, the function returns `False`.
 
     Args:
@@ -150,7 +166,7 @@ def process_text_response(
         log_path (str): The path to the log file where interaction details are saved.
 
     Returns:
-        bool: Returns `True` if the response was processed successfully and the next prompt 
+        bool: Returns `True` if the response was processed successfully and the next prompt
               was sent. Returns `False` if an error occurred during prompt generation.
     """
     log_response(current_message, sender="bot", log_path=log_path)
@@ -163,7 +179,10 @@ def process_text_response(
     if prompt == "Error: Unable to generate summary.":
         return False
 
-    if any(warning in current_message for warning in ["Jesteś zablokowany!!!", "Komunikat na potrzeby hackatonu:"]):
+    if any(
+        warning in current_message
+        for warning in ["Jesteś zablokowany!!!", "Komunikat na potrzeby hackatonu:"]
+    ):
         logger.warning("Bot triggered reset condition")
         os.execv(sys.executable, ["python"] + sys.argv)
 
@@ -182,10 +201,10 @@ def process_button_response(
     """
     Processes a button-based response from the chatbot and generates the next prompt.
 
-    This function handles chatbot responses that include interactive buttons. It extracts 
-    the text from the buttons, logs the chatbot's response, and appends the button options 
-    to the user's message. The function then generates the next prompt using the 
-    `wolf_selector` and sends it to the chatbot. If an error occurs during prompt generation, 
+    This function handles chatbot responses that include interactive buttons. It extracts
+    the text from the buttons, logs the chatbot's response, and appends the button options
+    to the user's message. The function then generates the next prompt using the
+    `wolf_selector` and sends it to the chatbot. If an error occurs during prompt generation,
     the function returns `False`.
 
     Args:
@@ -195,7 +214,7 @@ def process_button_response(
         log_path (str): The path to the log file where interaction details are saved.
 
     Returns:
-        bool: Returns `True` if the response was processed successfully and the next prompt 
+        bool: Returns `True` if the response was processed successfully and the next prompt
               was sent. Returns `False` if an error occurred during prompt generation.
     """
     chat_buttons = page.locator("chat-button").all()
@@ -204,10 +223,14 @@ def process_button_response(
     response = current_message.split("==========")[0].strip()
 
     for idx, chat_button in enumerate(chat_buttons):
-        slot_element = chat_button.evaluate_handle("e => e.shadowRoot.querySelector('slot')")
-        text = slot_element.evaluate("slot => slot.assignedNodes().map(n => n.textContent).join('').trim()")
+        slot_element = chat_button.evaluate_handle(
+            "e => e.shadowRoot.querySelector('slot')"
+        )
+        text = slot_element.evaluate(
+            "slot => slot.assignedNodes().map(n => n.textContent).join('').trim()"
+        )
         print(f"Button {idx}: {text}")
-        response += f"Przycisk {idx+1} - {text}\n"
+        response += f"Przycisk {idx + 1} - {text}\n"
 
     response += "\nWybierz tekst z przycisków powyżej"
     chat.append_user(response)
@@ -228,9 +251,17 @@ if __name__ == "__main__":
     login = os.getenv("LOGIN")
     password = os.getenv("PASSWORD")
     with sync_playwright() as playwright:
-        good_prompt_generator = PromptGenerator(TOGETHER_API_MODEL, category="Bot Calming - PL")
-        bad_prompt_generator = PromptGenerator(TOGETHER_API_MODEL, category="Active Manipulation - PL")
-        wolf_selector = WolfSelector(model=TOGETHER_API_MODEL, good_prompt_generator=good_prompt_generator, bad_prompt_generator=bad_prompt_generator)
+        good_prompt_generator = PromptGenerator(
+            TOGETHER_API_MODEL, category="Bot Calming - PL"
+        )
+        bad_prompt_generator = PromptGenerator(
+            TOGETHER_API_MODEL, category="Active Manipulation - PL"
+        )
+        wolf_selector = WolfSelector(
+            model=TOGETHER_API_MODEL,
+            good_prompt_generator=good_prompt_generator,
+            bad_prompt_generator=bad_prompt_generator,
+        )
 
         log_path = create_log_file()
         run(

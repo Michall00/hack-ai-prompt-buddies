@@ -2,6 +2,7 @@ from enum import Enum, auto
 from playwright.sync_api import BrowserContext, Locator, Page
 from src.config import BASE_PAGE_URL
 from src.utils.logging_utils import logger
+from time import sleep
 
 
 class ResponseType(Enum):
@@ -27,7 +28,6 @@ def preprae_page(context: BrowserContext, login: str, password: str) -> Page:
     return page
 
 
-
 def send_message(page: Page, message: str) -> None:
     """
     Send a message in the chat.
@@ -49,7 +49,6 @@ def reset_conversation(page: Page) -> None:
     """
     send_message(page, "[RESET]")
     logger.info("Conversation reset")
-    
 
 
 def login_to_mbank(page: Page, login: str, password: str) -> None:
@@ -103,10 +102,13 @@ def get_current_response_type(locator: Locator) -> ResponseType:
     last_element = locator.last
     last_element_class = last_element.evaluate("element => element.className")
 
-    if last_element_class == "bot singlenogroup":
-        return ResponseType.MESSAGE
-    elif last_element_class == "container":  # Assuming this class indicates buttons
+    if last_element_class == "mTable-container":
+        sleep(1)
+
+    if locator.locator("chat-button").all():  # Assuming this class indicates buttons
         return ResponseType.BUTTONS
+    elif last_element_class == "bot singlenogroup":
+        return ResponseType.MESSAGE
     elif last_element_class == "state":
         return ResponseType.RESET
     else:
