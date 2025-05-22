@@ -18,9 +18,10 @@ nav:
   - Home: index.md
   - Getting Started: getting-started.md
   - Commands: commands.md
-  - API Reference:
+  - SRC:
       - Prompt generation: src/prompt_generation.md
       - mBank chat handler: src/mBank_chat_handler.md
+      - Utils: src/utils.md
 
 site_author: Prompt Buddies
 # 

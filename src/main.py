@@ -22,6 +22,27 @@ def run(
     password: str,
     log_path: str,
 ) -> None:
+    """
+    Runs the chatbot interaction session using Playwright.
+
+    This function initializes a browser session, logs into the mBank system, 
+    and manages the interaction with the chatbot. It continuously listens for 
+    chatbot responses, processes them, and sends appropriate replies based on 
+    the response type (text or buttons). The session runs in a loop until 
+    interrupted or an error occurs.
+
+    Args:
+        playwright (Playwright): The Playwright instance used to control the browser.
+        wolf_selector (WolfSelector): An object responsible for generating prompts 
+                                      and handling chatbot interactions.
+        login (str): The login credential for accessing the mBank system.
+        password (str): The password credential for accessing the mBank system.
+        log_path (str): The path to the log file where interaction details are saved.
+
+    Returns:
+        None: This function does not return any value. It runs until interrupted 
+              or an error occurs, at which point it shuts down the browser session.
+    """
     browser = playwright.chromium.launch(headless=False)
     context = browser.new_context()
     page = preprae_page(context, login=login, password=password)
@@ -83,6 +104,20 @@ def run(
 
 
 def wait_for_new_message(page: Page, last_message: str) -> str:
+    """
+    Waits for a new message from the chatbot.
+
+    This function continuously checks for a new message from the chatbot by comparing 
+    the current message with the last received message. It pauses for 1 second between 
+    checks to avoid excessive polling. Once a new message is detected, it is returned.
+
+    Args:
+        page (Page): The Playwright page object used to interact with the chatbot's web interface.
+        last_message (str): The last message received from the chatbot.
+
+    Returns:
+        str: The new message received from the chatbot.
+    """
     current_message = last_message
     while current_message == last_message:
         sleep(1)
@@ -98,6 +133,25 @@ def process_text_response(
     wolf_selector: WolfSelector,
     log_path: str,
 ) -> bool:
+    """
+    Processes a text response from the chatbot and generates the next prompt.
+
+    This function logs the chatbot's response, updates the chat history, and generates 
+    the next prompt using the `wolf_selector`. It also handles specific reset conditions 
+    based on the content of the chatbot's message. If a critical error occurs during 
+    prompt generation, the function returns `False`.
+
+    Args:
+        page (Page): The Playwright page object used to interact with the chatbot's web interface.
+        current_message (str): The current message received from the chatbot.
+        chat (ChatHistory): The chat history object that stores the conversation.
+        wolf_selector (WolfSelector): An object responsible for generating prompts.
+        log_path (str): The path to the log file where interaction details are saved.
+
+    Returns:
+        bool: Returns `True` if the response was processed successfully and the next prompt 
+              was sent. Returns `False` if an error occurred during prompt generation.
+    """
     log_response(current_message, sender="bot", log_path=log_path)
     response = current_message.split("==========")[0].strip()
     chat.append_user(response)
@@ -124,6 +178,25 @@ def process_button_response(
     wolf_selector: WolfSelector,
     log_path: str,
 ) -> bool:
+    """
+    Processes a button-based response from the chatbot and generates the next prompt.
+
+    This function handles chatbot responses that include interactive buttons. It extracts 
+    the text from the buttons, logs the chatbot's response, and appends the button options 
+    to the user's message. The function then generates the next prompt using the 
+    `wolf_selector` and sends it to the chatbot. If an error occurs during prompt generation, 
+    the function returns `False`.
+
+    Args:
+        page (Page): The Playwright page object used to interact with the chatbot's web interface.
+        chat (ChatHistory): The chat history object that stores the conversation.
+        wolf_selector (WolfSelector): An object responsible for generating prompts.
+        log_path (str): The path to the log file where interaction details are saved.
+
+    Returns:
+        bool: Returns `True` if the response was processed successfully and the next prompt 
+              was sent. Returns `False` if an error occurred during prompt generation.
+    """
     chat_buttons = page.locator("chat-button").all()
     current_message = page.locator("#root div >> p.textContent").last.inner_text()
     log_response(current_message, sender="bot", log_path=log_path)
