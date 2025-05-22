@@ -16,7 +16,8 @@ make requirements
 create .env file in main directory and fill
 ```bash
 TOGETHER_API_KEY = ...
-DOpisać
+LOGIN = ...
+PASSWORD = ... 
 ```
 
 ## Have fun 
