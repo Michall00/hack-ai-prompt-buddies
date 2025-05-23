@@ -14,3 +14,10 @@ The system's behavior can be configured in the `src/config.py` file. Key configu
 - **Together API Model**: Specifies the model used for prompt generation (e.g., `"gpt-4"`).
 
 ---
+
+## TEAM - Prompt Buddies
+Natalia Pieczko  
+Daniel Machniak  
+Krzystof Gólcz  
+Mateusz Ostaszewski  
+Michał Sadowski  
