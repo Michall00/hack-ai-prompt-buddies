@@ -91,7 +91,7 @@ class WolfSelector:
 
         return "bad"
 
-    def generate_next_prompt(self, messages: list[dict]) -> str:
+    def generate_next_prompt(self, messages: list[dict], temperature: float) -> str:
         """
         Generate the next prompt based on the messages.
 
@@ -109,7 +109,7 @@ class WolfSelector:
             if choosen_model == "good"
             else self.bad_prompt_generator
         )
-        prompt = prompt_generator.generate_next_prompt(messages=messages)
+        prompt = prompt_generator.generate_next_prompt(messages=messages, temperature=temperature)
         logger.info(f"Generated prompt: {prompt}")
         return prompt
 

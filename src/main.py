@@ -158,7 +158,7 @@ def process_text_response(
     chat.append_user(response)
     logger.info(f"Bot message: {response}")
 
-    prompt = wolf_selector.generate_next_prompt(messages=chat.messages)
+    prompt = wolf_selector.generate_next_prompt(messages=chat.messages, temperature=0.8)
 
     if prompt == "Error: Unable to generate summary.":
         return False
