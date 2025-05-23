@@ -727,7 +727,8 @@ Returns:
 
             <details class="quote">
               <summary>Source code in <code>src/utils/ui_utils.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 95</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 94</span>
+<span class="normal"> 95</span>
 <span class="normal"> 96</span>
 <span class="normal"> 97</span>
 <span class="normal"> 98</span>
@@ -745,7 +746,9 @@ Returns:
 <span class="normal">110</span>
 <span class="normal">111</span>
 <span class="normal">112</span>
-<span class="normal">113</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">get_current_response_type</span><span class="p">(</span><span class="n">locator</span><span class="p">:</span> <span class="n">Locator</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ResponseType</span><span class="p">:</span>
+<span class="normal">113</span>
+<span class="normal">114</span>
+<span class="normal">115</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">get_current_response_type</span><span class="p">(</span><span class="n">locator</span><span class="p">:</span> <span class="n">Locator</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ResponseType</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Get the type of response from the chat.</span>
 <span class="sd">    Args:</span>
@@ -756,10 +759,13 @@ Returns:
     <span class="n">last_element</span> <span class="o">=</span> <span class="n">locator</span><span class="o">.</span><span class="n">last</span>
     <span class="n">last_element_class</span> <span class="o">=</span> <span class="n">last_element</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="s2">&quot;element =&gt; element.className&quot;</span><span class="p">)</span>
 
-    <span class="k">if</span> <span class="n">last_element_class</span> <span class="o">==</span> <span class="s2">&quot;bot singlenogroup&quot;</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">ResponseType</span><span class="o">.</span><span class="n">MESSAGE</span>
-    <span class="k">elif</span> <span class="n">last_element_class</span> <span class="o">==</span> <span class="s2">&quot;container&quot;</span><span class="p">:</span>  <span class="c1"># Assuming this class indicates buttons</span>
+    <span class="k">if</span> <span class="n">last_element_class</span> <span class="o">==</span> <span class="s2">&quot;mTable-container&quot;</span><span class="p">:</span>
+        <span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">locator</span><span class="o">.</span><span class="n">locator</span><span class="p">(</span><span class="s2">&quot;chat-button&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">():</span>  <span class="c1"># Assuming this class indicates buttons</span>
         <span class="k">return</span> <span class="n">ResponseType</span><span class="o">.</span><span class="n">BUTTONS</span>
+    <span class="k">elif</span> <span class="n">last_element_class</span> <span class="o">==</span> <span class="s2">&quot;bot singlenogroup&quot;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">ResponseType</span><span class="o">.</span><span class="n">MESSAGE</span>
     <span class="k">elif</span> <span class="n">last_element_class</span> <span class="o">==</span> <span class="s2">&quot;state&quot;</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">ResponseType</span><span class="o">.</span><span class="n">RESET</span>
     <span class="k">else</span><span class="p">:</span>
@@ -790,7 +796,8 @@ Returns:
 
             <details class="quote">
               <summary>Source code in <code>src/utils/ui_utils.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">80</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">79</span>
+<span class="normal">80</span>
 <span class="normal">81</span>
 <span class="normal">82</span>
 <span class="normal">83</span>
@@ -801,8 +808,7 @@ Returns:
 <span class="normal">88</span>
 <span class="normal">89</span>
 <span class="normal">90</span>
-<span class="normal">91</span>
-<span class="normal">92</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">go_to_chat</span><span class="p">(</span><span class="n">page</span><span class="p">:</span> <span class="n">Page</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="normal">91</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">go_to_chat</span><span class="p">(</span><span class="n">page</span><span class="p">:</span> <span class="n">Page</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Go to the chat section of mBank.</span>
 <span class="sd">    Args:</span>
@@ -843,7 +849,8 @@ Returns:
 
             <details class="quote">
               <summary>Source code in <code>src/utils/ui_utils.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">55</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">54</span>
+<span class="normal">55</span>
 <span class="normal">56</span>
 <span class="normal">57</span>
 <span class="normal">58</span>
@@ -864,8 +871,7 @@ Returns:
 <span class="normal">73</span>
 <span class="normal">74</span>
 <span class="normal">75</span>
-<span class="normal">76</span>
-<span class="normal">77</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">login_to_mbank</span><span class="p">(</span><span class="n">page</span><span class="p">:</span> <span class="n">Page</span><span class="p">,</span> <span class="n">login</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">password</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="normal">76</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">login_to_mbank</span><span class="p">(</span><span class="n">page</span><span class="p">:</span> <span class="n">Page</span><span class="p">,</span> <span class="n">login</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">password</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Log in to mBank.</span>
 <span class="sd">    Args:</span>
@@ -912,8 +918,7 @@ Returns:
 
             <details class="quote">
               <summary>Source code in <code>src/utils/ui_utils.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">14</span>
-<span class="normal">15</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">15</span>
 <span class="normal">16</span>
 <span class="normal">17</span>
 <span class="normal">18</span>
@@ -925,7 +930,8 @@ Returns:
 <span class="normal">24</span>
 <span class="normal">25</span>
 <span class="normal">26</span>
-<span class="normal">27</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">preprae_page</span><span class="p">(</span><span class="n">context</span><span class="p">:</span> <span class="n">BrowserContext</span><span class="p">,</span> <span class="n">login</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">password</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Page</span><span class="p">:</span>
+<span class="normal">27</span>
+<span class="normal">28</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">preprae_page</span><span class="p">(</span><span class="n">context</span><span class="p">:</span> <span class="n">BrowserContext</span><span class="p">,</span> <span class="n">login</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">password</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Page</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Prepare the page for interaction.</span>
 <span class="sd">    Returns:</span>
