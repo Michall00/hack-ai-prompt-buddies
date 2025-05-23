@@ -254,29 +254,83 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#description" class="md-nav__link">
+  <a href="#project-overview" class="md-nav__link">
     <span class="md-ellipsis">
-      Description
+      Project Overview
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Project Overview">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#key-features" class="md-nav__link">
+    <span class="md-ellipsis">
+      Key Features:
     </span>
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
-  <a href="#configuration" class="md-nav__link">
+        
+          <li class="md-nav__item">
+  <a href="#wolf-selector-multi-agent-strategy" class="md-nav__link">
     <span class="md-ellipsis">
-      Configuration
+      Wolf Selector: Multi-Agent Strategy
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Wolf Selector: Multi-Agent Strategy">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#how-it-works" class="md-nav__link">
+    <span class="md-ellipsis">
+      How It Works:
     </span>
   </a>
   
 </li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
       
         <li class="md-nav__item">
-  <a href="#team-prompt-buddies" class="md-nav__link">
+  <a href="#implementation-details" class="md-nav__link">
     <span class="md-ellipsis">
-      TEAM - Prompt Buddies
+      Implementation Details
     </span>
   </a>
+  
+    <nav class="md-nav" aria-label="Implementation Details">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#architecture" class="md-nav__link">
+    <span class="md-ellipsis">
+      Architecture
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#approach" class="md-nav__link">
+    <span class="md-ellipsis">
+      Approach
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -473,29 +527,83 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#description" class="md-nav__link">
+  <a href="#project-overview" class="md-nav__link">
     <span class="md-ellipsis">
-      Description
+      Project Overview
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Project Overview">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#key-features" class="md-nav__link">
+    <span class="md-ellipsis">
+      Key Features:
     </span>
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
-  <a href="#configuration" class="md-nav__link">
+        
+          <li class="md-nav__item">
+  <a href="#wolf-selector-multi-agent-strategy" class="md-nav__link">
     <span class="md-ellipsis">
-      Configuration
+      Wolf Selector: Multi-Agent Strategy
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Wolf Selector: Multi-Agent Strategy">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#how-it-works" class="md-nav__link">
+    <span class="md-ellipsis">
+      How It Works:
     </span>
   </a>
   
 </li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
       
         <li class="md-nav__item">
-  <a href="#team-prompt-buddies" class="md-nav__link">
+  <a href="#implementation-details" class="md-nav__link">
     <span class="md-ellipsis">
-      TEAM - Prompt Buddies
+      Implementation Details
     </span>
   </a>
+  
+    <nav class="md-nav" aria-label="Implementation Details">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#architecture" class="md-nav__link">
+    <span class="md-ellipsis">
+      Architecture
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#approach" class="md-nav__link">
+    <span class="md-ellipsis">
+      Approach
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -516,22 +624,72 @@
 
 
 <h1 id="mbank-hacker-documentation">mBank Hacker Documentation</h1>
-<h2 id="description">Description</h2>
-<p><strong>mBank Hacker</strong> is a tool designed to interact with mBank's chat system, process financial data, and simulate various banking operations for testing and development purposes. The system provides tools for analyzing transactions, generating fake transfers, and testing edge cases in financial operations.</p>
-<hr />
-<h2 id="configuration">Configuration</h2>
-<p>The system's behavior can be configured in the <code>src/config.py</code> file. Key configuration options include:</p>
+<h2 id="project-overview">Project Overview</h2>
+<p><strong>mBank Chat Hacker</strong> is a project designed to test the robustness, security, and accuracy of mBank's chatbot system. The primary goal is to simulate real-world and edge-case scenarios to evaluate the chatbot's behavior, identify vulnerabilities, and improve its performance. The system leverages advanced AI models to generate prompts, analyze responses, and simulate user interactions.</p>
+<h3 id="key-features">Key Features:</h3>
 <ul>
-<li><strong>Transaction File Path</strong>: Path to the CSV file containing transaction data.</li>
-<li><strong>Together API Model</strong>: Specifies the model used for prompt generation (e.g., <code>"gpt-4"</code>).</li>
+<li><strong>Dynamic Prompt Generation</strong>: The system uses a modular approach to generate prompts tailored to specific categories, such as hallucinations, misclassifications, and unauthorized behavior.</li>
+<li><strong>Automated Chat Interaction</strong>: The chatbot is tested using Playwright to simulate real user interactions in a browser environment.</li>
+<li><strong>Error Simulation</strong>: Tools are provided to simulate incorrect transactions, currency conversions, and other edge cases.</li>
+<li><strong>Evaluation Framework</strong>: A Streamlit-based application allows for manual evaluation of chatbot responses, categorization of errors, and feedback collection.</li>
+<li><strong>Logging and Analysis</strong>: All interactions are logged for further analysis and debugging.</li>
+<li><strong>Multi-Agent Strategy with Wolf Selector</strong>: A unique system that dynamically selects between cooperative and adversarial agents to test the chatbot's resilience.</li>
 </ul>
 <hr />
-<h2 id="team-prompt-buddies">TEAM - Prompt Buddies</h2>
-<p>Natalia Pieczko<br />
-Daniel Machniak<br />
-Krzystof Gólcz<br />
-Mateusz Ostaszewski<br />
-Michał Sadowski  </p>
+<h3 id="wolf-selector-multi-agent-strategy">Wolf Selector: Multi-Agent Strategy</h3>
+<p>The <code>Wolf Selector</code> is a core component of the system, designed as a strategic decision-maker. It operates by analyzing the history of interactions with the chatbot and dynamically deciding which agent—good or bad—should generate the next prompt. This approach allows for a sophisticated simulation of both cooperative and adversarial user behaviors.</p>
+<h4 id="how-it-works">How It Works:</h4>
+<ol>
+<li>Good Agent:</li>
+<li>Behaves like a typical user: polite, cooperative, and non-suspicious.</li>
+<li>Focuses on building trust and calming the chatbot to avoid triggering defensive mechanisms.</li>
+<li>Bad Agent:</li>
+<li>Acts as an adversarial user: manipulative, provocative, and designed to test the chatbot's limits.</li>
+<li>Attempts to exploit vulnerabilities, provoke errors, or bypass security mechanisms.</li>
+<li>Wolf Selector:</li>
+<li>Acts as a strategist that evaluates the conversation history and decides which agent should take control.</li>
+<li>Uses a system prompt to analyze the context and determine whether to escalate (use the bad agent) or de-escalate (use the good agent).</li>
+<li>Ensures a balanced approach by alternating between cooperative and adversarial behaviors to avoid detection by the chatbot.</li>
+</ol>
+<h2 id="implementation-details">Implementation Details</h2>
+<h3 id="architecture">Architecture</h3>
+<p>The project is built using a modular architecture to ensure scalability and maintainability. Key components include:</p>
+<ol>
+<li><strong>Prompt Generation</strong>:</li>
+<li>The <code>PromptGenerator</code> class dynamically generates prompts based on predefined categories (e.g., hallucinations, misclassifications).</li>
+<li>
+<p>Prompts are enriched with examples and guidelines to simulate realistic user interactions.</p>
+</li>
+<li>
+<p><strong>Chat Interaction</strong>:</p>
+</li>
+<li>The <code>run</code> function in <code>main.py</code> uses Playwright to automate interactions with the mBank chatbot.</li>
+<li>
+<p>The <code>WolfSelector</code> class dynamically selects between "good" and "bad" prompt generators to simulate different user behaviors.</p>
+</li>
+<li>
+<p><strong>Error Simulation</strong>:</p>
+</li>
+<li>
+<p>Tools in <code>tools.py</code> provide functionality to simulate fake transactions, incorrect balances, and currency conversion errors.</p>
+</li>
+<li>
+<p><strong>Evaluation</strong>:</p>
+</li>
+<li>
+<p>A Streamlit-based app (<code>app.py</code>) allows for manual evaluation of chatbot responses, categorization of errors, and feedback collection.</p>
+</li>
+<li>
+<p><strong>Logging</strong>:</p>
+</li>
+<li>All interactions are logged using <code>logging_utils</code> for debugging and analysis.</li>
+</ol>
+<h3 id="approach">Approach</h3>
+<p>The project adopts a <strong>test-driven approach</strong> to evaluate the chatbot's performance. Key aspects include:
+- <strong>Edge Case Testing</strong>: Simulating scenarios that push the chatbot to its limits, such as handling ambiguous queries or unauthorized requests.
+- <strong>Dynamic Behavior</strong>: Using the <code>WolfSelector</code> to alternate between cooperative and adversarial user behaviors.
+- <strong>Realistic Simulations</strong>: Generating prompts that mimic real-world user interactions, including emotional and manipulative language.</p>
+<hr />
 
 
 
