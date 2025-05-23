@@ -4,3 +4,4 @@
 *.pyc
 logs/
 docs/site/
+data/logs*
