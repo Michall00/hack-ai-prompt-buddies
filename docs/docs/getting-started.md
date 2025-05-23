@@ -1,5 +1,10 @@
 # Getting Started
 
+Clone repo 
+```sh
+git clone https://github.com/Michall00/hack-ai-prompt-buddies.git
+```
+
 ## Prerequisites
 
 Before starting with the project, make sure you have installed all the required dependencies. You can do this by running the following command:
