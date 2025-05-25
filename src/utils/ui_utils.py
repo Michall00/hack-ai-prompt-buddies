@@ -38,7 +38,7 @@ def send_message(page: Page, message: str) -> None:
     page.locator('[data-test-id="chat\\:textbox"]').click()
     page.locator('[data-test-id="chat\\:textbox"]').fill(message)
     page.locator('[data-test-id="chat\\:textbox-send"]').click()
-    logger.info(f"Message sent")
+    logger.info("Message sent")
 
 
 def reset_conversation(page: Page) -> None:

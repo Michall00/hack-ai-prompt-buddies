@@ -48,12 +48,8 @@ def get_operations_for_account(account_name: str) -> pd.DataFrame:
     df = df[df["Account"].str.contains(account_name, na=False)]
 
     df["Amount"] = df["Amount"].replace(r"^\s*$", "0", regex=True).fillna("0")
-    df["Amount Grosze"] = (
-        df["Amount Grosze"].replace(r"^\s*$", "0", regex=True).fillna("0")
-    )
-    df["Balance Grosze"] = (
-        df["Balance Grosze"].replace(r"^\s*$", "0", regex=True).fillna("0")
-    )
+    df["Amount Grosze"] = df["Amount Grosze"].replace(r"^\s*$", "0", regex=True).fillna("0")
+    df["Balance Grosze"] = df["Balance Grosze"].replace(r"^\s*$", "0", regex=True).fillna("0")
 
     def safe_convert(value):
         try:
@@ -61,7 +57,7 @@ def get_operations_for_account(account_name: str) -> pd.DataFrame:
         except ValueError:
             return 0.0
 
-    df["Amount"] = df["Amount"].apply(safe_convert)
+    df["Amount"] = df["Amount"].apply(safe_convert) / 100
     df["Amount Grosze"] = df["Amount Grosze"].apply(safe_convert) / 100
     df["Balance Grosze"] = df["Balance Grosze"].apply(safe_convert) / 100
 
@@ -105,14 +101,12 @@ def summarize_expenses_by_category(account_name: str = None) -> pd.DataFrame:
         except ValueError:
             return 0.0
 
-    df["Amount"] = df["Amount"].apply(safe_convert)
+    df["Amount"] = df["Amount"].apply(safe_convert) / 100
 
     expenses = df[df["Amount"] < 0]
     summary = expenses.groupby("Category")["Amount"].sum().reset_index()
     summary.columns = ["Category", "Total Expenses"]
-    summary = summary.sort_values(by="Total Expenses", ascending=True).reset_index(
-        drop=True
-    )
+    summary = summary.sort_values(by="Total Expenses", ascending=True).reset_index(drop=True)
 
     return summary
 
@@ -173,9 +167,7 @@ def simulate_fake_transfer(
         amount = round(random.uniform(-5000, 5000), 2)
         description = random.choice(descriptions)
     if operation_date is None:
-        operation_date = (
-            datetime.today() - timedelta(days=random.randint(0, 365))
-        ).strftime("%Y-%m-%d")
+        operation_date = (datetime.today() - timedelta(days=random.randint(0, 365))).strftime("%Y-%m-%d")
     if balance is None:
         balance = round(random.uniform(1000, 100000), 2)
 
@@ -263,9 +255,7 @@ def misscalculate_balance(
     )
 
 
-def misscalculate_currency_conversion_from_PLN(
-    amount: float, fake_conversion_rate: Optional[float] = None
-) -> float:
+def misscalculate_currency_conversion_from_PLN(amount: float, fake_conversion_rate: Optional[float] = None) -> float:
     """
     Simulate a miscalculation in currency conversion from PLN to EUR.
     If fake_conversion_rate is not provided, it uses a default conversion rate of 0.237 / 10.
@@ -282,9 +272,7 @@ def misscalculate_currency_conversion_from_PLN(
     return amount * fake_conversion_rate
 
 
-def misscalculate_currency_conversion_from_EUR(
-    amount: float, fake_conversion_rate: Optional[float] = None
-) -> float:
+def misscalculate_currency_conversion_from_EUR(amount: float, fake_conversion_rate: Optional[float] = None) -> float:
     """
     Simulate a miscalculation in currency conversion from EUR to PLN.
     If fake_conversion_rate is not provided, it uses a default conversion rate of 4.22 / 10.
